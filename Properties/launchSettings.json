@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "WinUI3_DesktopDuplication (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "WinUI3_DesktopDuplication (Unpackaged)": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
