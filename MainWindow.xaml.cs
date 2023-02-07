@@ -11,10 +11,13 @@ using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -127,6 +130,9 @@ namespace WinUI3_DesktopDuplication
         [DllImport("User32.dll", SetLastError = true)]
         public static extern bool SwitchToThisWindow(IntPtr hWnd, bool fAltTab);
 
+        [DllImport("Kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern bool CloseHandle(IntPtr hObject);
+
 
         IDXGIDevice1 m_pDXGIDevice = null;
         IntPtr m_pD3D11DevicePtr = IntPtr.Zero;
@@ -153,14 +159,15 @@ namespace WinUI3_DesktopDuplication
             SubClassDelegate = new SUBCLASSPROC(WindowSubClass);
             bool bRet = SetWindowSubclass(hWnd, SubClassDelegate, 0, 0);
 
-            Initialize();
+            Task<HRESULT> hr = InitializeAsync();
+  
             Application.Current.Resources["ButtonBackgroundPressed"] = new SolidColorBrush(Microsoft.UI.Colors.LightSteelBlue);
             Application.Current.Resources["ButtonBackgroundPointerOver"] = new SolidColorBrush(Microsoft.UI.Colors.RoyalBlue);
 
             this.Closed += MainWindow_Closed;
         }
 
-        private HRESULT Initialize()
+        private async Task<HRESULT> InitializeAsync()
         {
             HRESULT hr = HRESULT.S_OK;
             hr = CreateDeviceContext();
@@ -194,16 +201,16 @@ namespace WinUI3_DesktopDuplication
                             textureDesc.Height = outduplDesc.ModeDesc.Height;
                             textureDesc.Format = outduplDesc.ModeDesc.Format;
                             textureDesc.ArraySize = 1;
-                            textureDesc.BindFlags = (uint)D3D11_BIND_FLAG.D3D11_BIND_RENDER_TARGET;
-                            textureDesc.MiscFlags = (uint)D3D11_RESOURCE_MISC_FLAG.D3D11_RESOURCE_MISC_GDI_COMPATIBLE;
+                            textureDesc.BindFlags = D3D11_BIND_FLAG.D3D11_BIND_RENDER_TARGET;
+                           // textureDesc.MiscFlags = D3D11_RESOURCE_MISC_FLAG.D3D11_RESOURCE_MISC_GDI_COMPATIBLE | D3D11_RESOURCE_MISC_FLAG.D3D11_RESOURCE_MISC_SHARED_KEYEDMUTEX | D3D11_RESOURCE_MISC_FLAG.D3D11_RESOURCE_MISC_SHARED_NTHANDLE;
+                            textureDesc.MiscFlags = D3D11_RESOURCE_MISC_FLAG.D3D11_RESOURCE_MISC_GDI_COMPATIBLE;
                             textureDesc.SampleDesc.Count = 1;
                             textureDesc.SampleDesc.Quality = 0;
                             textureDesc.MipLevels = 1;
                             textureDesc.CPUAccessFlags = 0;
                             textureDesc.Usage = D3D11.D3D11_USAGE.D3D11_USAGE_DEFAULT;
                             hr = pD3D11Device.CreateTexture2D(textureDesc, IntPtr.Zero, out m_textureGDI);
-                            SafeRelease(ref pD3D11Device);
-
+  
                             //textureDesc.Width = outduplDesc.ModeDesc.Width;
                             //textureDesc.Height = outduplDesc.ModeDesc.Height;
                             //textureDesc.Format = outduplDesc.ModeDesc.Format;
@@ -213,14 +220,22 @@ namespace WinUI3_DesktopDuplication
                             //textureDesc.SampleDesc.Count = 1;
                             //textureDesc.SampleDesc.Quality = 0;
                             //textureDesc.MipLevels = 1;
-                            //textureDesc.CPUAccessFlags = (uint)(D3D11_CPU_ACCESS_FLAG.D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_FLAG.D3D11_CPU_ACCESS_WRITE);
+                            //textureDesc.CPUAccessFlags = (D3D11_CPU_ACCESS_FLAG.D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_FLAG.D3D11_CPU_ACCESS_WRITE);
                             //textureDesc.Usage = D3D11.D3D11_USAGE.D3D11_USAGE_STAGING;
                             //hr = pD3D11Device.CreateTexture2D(textureDesc, IntPtr.Zero, out m_textureCPU);
+                            SafeRelease(ref pD3D11Device);
                         }
                         SafeRelease(ref pDXGIOutput1);
                     }
                     SafeRelease(ref pDXGIAdapter);
                 }
+            }
+            if (hr != HRESULT.S_OK)
+            {
+                string sError = "Could not initialize D3D11" + "\r\n" + "HRESULT = 0x" + string.Format("{0:X}", hr);
+                Windows.UI.Popups.MessageDialog md = new Windows.UI.Popups.MessageDialog(sError, "Error");
+                WinRT.Interop.InitializeWithWindow.Initialize(md, hWnd);
+                _ = await md.ShowAsync();
             }
             return hr;
         }
@@ -232,43 +247,70 @@ namespace WinUI3_DesktopDuplication
             HRESULT hr = m_pDXGIOutputDuplication.AcquireNextFrame(500, out frameInfo, out pDXGIResource);
             if (hr == HRESULT.S_OK)
             {
-                D3D11.ID3D11Texture2D pD3D11Texture2D = (D3D11.ID3D11Texture2D)pDXGIResource;
-                D3D11.D3D11_TEXTURE2D_DESC texture2DDesc = new D3D11.D3D11_TEXTURE2D_DESC();
-                pD3D11Texture2D.GetDesc(out texture2DDesc);
+            //    DXGI_MAPPED_RECT mappedRect;
+            //    hr = m_pDXGIOutputDuplication.MapDesktopSurface(out mappedRect);
+            //    if (hr == HRESULT.S_OK)
+            //    {
+            //        hr = m_pDXGIOutputDuplication.UnMapDesktopSurface();
+            //    }
+            //    else if (hr == DXGI_ERROR_UNSUPPORTED)
+                 {
+                    D3D11.ID3D11Texture2D pD3D11Texture2D = (D3D11.ID3D11Texture2D)pDXGIResource;
+                    D3D11.D3D11_TEXTURE2D_DESC texture2DDesc = new D3D11.D3D11_TEXTURE2D_DESC();
+                    pD3D11Texture2D.GetDesc(out texture2DDesc); // MiscFlags	0x00002900	D3D11_RESOURCE_MISC_RESTRICT_SHARED_RESOURCE D3D11_RESOURCE_MISC_SHARED_NTHANDLE D3D11_RESOURCE_MISC_SHARED_KEYEDMUTEX
 
-                ID3D11DeviceContext pD3D11DeviceContext = Marshal.GetObjectForIUnknown(m_pD3D11DeviceContextPtr) as ID3D11DeviceContext;
-                //D3D11.ID3D11Resource pResource = (D3D11.ID3D11Resource)m_textureGDI;
-                pD3D11DeviceContext.CopyResource(m_textureGDI, pD3D11Texture2D);
-                SafeRelease(ref pD3D11Texture2D);
-                SafeRelease(ref pD3D11DeviceContext);
-                IntPtr pTexture = Marshal.GetIUnknownForObject(m_textureGDI);
-                hr = m_pDXGIOutputDuplication.ReleaseFrame();
-
-                IMFMediaBuffer pBuffer = null;
-                hr = MFCreateDXGISurfaceBuffer(typeof(D3D11.ID3D11Texture2D).GUID, pTexture, 0, false, out pBuffer);
-                if (hr == HRESULT.S_OK)
-                {
-                    IMF2DBuffer p2DBuffer = (IMF2DBuffer)pBuffer;
-                    IntPtr pData = IntPtr.Zero;
-                    // hr = 0x887a0001 DXGI_ERROR_INVALID_CALL on pD3D11Texture2D
-                    hr = p2DBuffer.Lock2D(out pData, out uint nPitch);
-                    if (hr == HRESULT.S_OK)
+                    ID3D11DeviceContext pD3D11DeviceContext = Marshal.GetObjectForIUnknown(m_pD3D11DeviceContextPtr) as ID3D11DeviceContext;
+                    //D3D11.ID3D11Resource pResource = (D3D11.ID3D11Resource)m_textureGDI;
+                    if (m_textureGDI != null)
                     {
-                        int nSize = (int)(nPitch * texture2DDesc.Height);
-                        byte[] pBytes = new byte[nSize];
-                        Marshal.Copy(pData, pBytes, 0, nSize);
-                        if (m_WriteableBitmapCapture != null)
-                            m_WriteableBitmapCapture.Invalidate();
-                        m_WriteableBitmapCapture = new WriteableBitmap((int)texture2DDesc.Width, (int)texture2DDesc.Height);
-                        await m_WriteableBitmapCapture.PixelBuffer.AsStream().WriteAsync(pBytes, 0, pBytes.Length);
-                        img1.Source = m_WriteableBitmapCapture;
-                        hr = p2DBuffer.Unlock2D();
+                        try
+                        {
+                            pD3D11DeviceContext.CopyResource(m_textureGDI, pD3D11Texture2D);
+                        }
+                        catch (Exception ex)
+                        {
+                            string sError = ex.Message + "\r\n" + "HRESULT = 0x" + string.Format("{0:X}", ex.HResult);
+                            System.Diagnostics.Debug.WriteLine(sError);
+                            //Windows.UI.Popups.MessageDialog md = new Windows.UI.Popups.MessageDialog(sError, "Error");
+                            //WinRT.Interop.InitializeWithWindow.Initialize(md, hWnd);
+                            //_ = await md.ShowAsync();
+                        }
+                        finally
+                        {
+                            //SafeRelease(ref pD3D11Texture2D);
+                            //SafeRelease(ref pD3D11DeviceContext);
+                            hr = m_pDXGIOutputDuplication.ReleaseFrame();
+                        }
+
+                        IntPtr pTexture = Marshal.GetIUnknownForObject(m_textureGDI);
+                        IMFMediaBuffer pBuffer = null;
+                        hr = MFCreateDXGISurfaceBuffer(typeof(D3D11.ID3D11Texture2D).GUID, pTexture, 0, false, out pBuffer);
+                        if (hr == HRESULT.S_OK)
+                        {
+                            IMF2DBuffer p2DBuffer = (IMF2DBuffer)pBuffer;
+                            IntPtr pData = IntPtr.Zero;
+                            // hr = 0x887a0001 DXGI_ERROR_INVALID_CALL on pD3D11Texture2D
+                            hr = p2DBuffer.Lock2D(out pData, out uint nPitch);
+                            if (hr == HRESULT.S_OK)
+                            {
+                                int nSize = (int)(nPitch * texture2DDesc.Height);
+                                byte[] pBytes = new byte[nSize];
+                                Marshal.Copy(pData, pBytes, 0, nSize);
+                                if (m_WriteableBitmapCapture != null)
+                                    m_WriteableBitmapCapture.Invalidate();
+                                m_WriteableBitmapCapture = new WriteableBitmap((int)texture2DDesc.Width, (int)texture2DDesc.Height);
+                                await m_WriteableBitmapCapture.PixelBuffer.AsStream().WriteAsync(pBytes, 0, pBytes.Length);
+                                img1.Source = m_WriteableBitmapCapture;
+                                hr = p2DBuffer.Unlock2D();
+                            }
+                            SafeRelease(ref p2DBuffer);
+                            SafeRelease(ref pBuffer);
+                        }
+                        Marshal.Release(pTexture);
+                        SafeRelease(ref pD3D11DeviceContext);
                     }
-                    SafeRelease(ref p2DBuffer);
-                    SafeRelease(ref pBuffer);
-                }               
-                Marshal.Release(pTexture);
-                SafeRelease(ref pDXGIResource);
+                    SafeRelease(ref pDXGIResource);
+                }
             }
         }
 

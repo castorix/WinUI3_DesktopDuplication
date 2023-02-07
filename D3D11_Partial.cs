@@ -8,9 +8,17 @@ using System.Runtime.InteropServices;
 using GlobalStructures;
 using DXGI;
 using static DXGI.DXGITools;
+using System.Reflection.Metadata;
+using Microsoft.UI.Xaml.Controls;
 
 namespace D3D11
 {
+    public class D3D11Tools
+    {
+        [DllImport("D3D11.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern uint D3D11CalcSubresource(uint MipSlice, uint ArraySlice, uint MipLevels);
+    }
+
     [ComImport]
     [Guid("1841e5c8-16b0-489b-bcc8-44cfb0d5deae")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -75,9 +83,9 @@ namespace D3D11
     {
         public uint ByteWidth;
         public D3D11_USAGE Usage;
-        public uint BindFlags;
-        public uint CPUAccessFlags;
-        public uint MiscFlags;
+        public D3D11_BIND_FLAG BindFlags;
+        public D3D11_CPU_ACCESS_FLAG CPUAccessFlags;
+        public D3D11_RESOURCE_MISC_FLAG MiscFlags;
         public uint StructureByteStride;
     }
 
@@ -426,7 +434,7 @@ namespace D3D11
     public struct D3D11_QUERY_DESC
     {
         public D3D11_QUERY Query;
-        public uint MiscFlags;
+        public D3D11_RESOURCE_MISC_FLAG MiscFlags;
     }
 
     public enum D3D11_QUERY
@@ -874,6 +882,7 @@ namespace D3D11
         void VSSetShader(ID3D11VertexShader pVertexShader, ID3D11ClassInstance ppClassInstances, uint NumClassInstances);
         void DrawIndexed(uint IndexCount, uint StartIndexLocation, int BaseVertexLocation);
         void Draw(uint VertexCount, uint StartVertexLocation);
+        [PreserveSig]
         HRESULT Map(ID3D11Resource pResource, uint Subresource, D3D11_MAP MapType, uint MapFlags, out D3D11_MAPPED_SUBRESOURCE pMappedResource);
         void Unmap(ID3D11Resource pResource, uint Subresource);
         void PSSetConstantBuffers(uint StartSlot, uint NumBuffers, ID3D11Buffer ppConstantBuffers);
@@ -914,6 +923,7 @@ namespace D3D11
         ////void RSSetScissorRects(uint NumRects, D3D11_RECT pRects);
         void RSSetScissorRects(uint NumRects, ref RECT pRects);
         void CopySubresourceRegion(ID3D11Resource pDstResource, uint DstSubresource, uint DstX, uint DstY, uint DstZ, ID3D11Resource pSrcResource, uint SrcSubresource, D3D11_BOX pSrcBox);
+        [PreserveSig]
         void CopyResource(ID3D11Resource pDstResource, ID3D11Resource pSrcResource);
         void UpdateSubresource(ID3D11Resource pDstResource, uint DstSubresource, D3D11_BOX pDstBox, IntPtr pSrcData, uint SrcRowPitch, uint SrcDepthPitch);
         void CopyStructureCount(ID3D11Buffer pDstBuffer, uint DstAlignedByteOffset, ID3D11UnorderedAccessView pSrcView);
@@ -1169,6 +1179,7 @@ namespace D3D11
         HRESULT CreateCounter(ref D3D11_COUNTER_DESC pCounterDesc, out ID3D11Counter ppCounter);
         [PreserveSig]
         HRESULT CreateDeferredContext(uint ContextFlags, out ID3D11DeviceContext ppDeferredContext);
+        [PreserveSig]
         HRESULT OpenSharedResource(IntPtr hResource, ref Guid ReturnedInterface, out IntPtr ppResource);
         HRESULT CheckFormatSupport(DXGI_FORMAT Format, out uint pFormatSupport);
         HRESULT CheckMultisampleQualityLevels(DXGI_FORMAT Format, uint SampleCount, out uint pNumQualityLevels);
@@ -1224,9 +1235,9 @@ namespace D3D11
         public uint ArraySize;
         public DXGI_FORMAT Format;
         public D3D11_USAGE Usage;
-        public uint BindFlags;
-        public uint CPUAccessFlags;
-        public uint MiscFlags;
+        public D3D11_BIND_FLAG BindFlags;
+        public D3D11_CPU_ACCESS_FLAG CPUAccessFlags;
+        public D3D11_RESOURCE_MISC_FLAG MiscFlags;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1239,9 +1250,32 @@ namespace D3D11
         public DXGI_FORMAT Format;
         public DXGI_SAMPLE_DESC SampleDesc;
         public D3D11_USAGE Usage;
-        public uint BindFlags;
-        public uint CPUAccessFlags;
-        public uint MiscFlags;
+        public D3D11_BIND_FLAG BindFlags;
+        public D3D11_CPU_ACCESS_FLAG CPUAccessFlags;
+        public D3D11_RESOURCE_MISC_FLAG MiscFlags;
+    }
+
+    public enum D3D11_RESOURCE_MISC_FLAG
+    {
+        D3D11_RESOURCE_MISC_GENERATE_MIPS = 0x1,
+        D3D11_RESOURCE_MISC_SHARED = 0x2,
+        D3D11_RESOURCE_MISC_TEXTURECUBE = 0x4,
+        D3D11_RESOURCE_MISC_DRAWINDIRECT_ARGS = 0x10,
+        D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS = 0x20,
+        D3D11_RESOURCE_MISC_BUFFER_STRUCTURED = 0x40,
+        D3D11_RESOURCE_MISC_RESOURCE_CLAMP = 0x80,
+        D3D11_RESOURCE_MISC_SHARED_KEYEDMUTEX = 0x100,
+        D3D11_RESOURCE_MISC_GDI_COMPATIBLE = 0x200,
+        D3D11_RESOURCE_MISC_SHARED_NTHANDLE = 0x800,
+        D3D11_RESOURCE_MISC_RESTRICTED_CONTENT = 0x1000,
+        D3D11_RESOURCE_MISC_RESTRICT_SHARED_RESOURCE = 0x2000,
+        D3D11_RESOURCE_MISC_RESTRICT_SHARED_RESOURCE_DRIVER = 0x4000,
+        D3D11_RESOURCE_MISC_GUARDED = 0x8000,
+        D3D11_RESOURCE_MISC_TILE_POOL = 0x20000,
+        D3D11_RESOURCE_MISC_TILED = 0x40000,
+        D3D11_RESOURCE_MISC_HW_PROTECTED = 0x80000,
+        D3D11_RESOURCE_MISC_SHARED_DISPLAYABLE,
+        D3D11_RESOURCE_MISC_SHARED_EXCLUSIVE_WRITER
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1253,9 +1287,9 @@ namespace D3D11
         public uint MipLevels;
         public DXGI_FORMAT Format;
         public D3D11_USAGE Usage;
-        public uint BindFlags;
-        public uint CPUAccessFlags;
-        public uint MiscFlags;
+        public D3D11_BIND_FLAG BindFlags;
+        public D3D11_CPU_ACCESS_FLAG CPUAccessFlags;
+        public D3D11_RESOURCE_MISC_FLAG MiscFlags;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1280,7 +1314,7 @@ namespace D3D11
     public struct D3D11_COUNTER_DESC
     {
         public D3D11_COUNTER Counter;
-        public uint MiscFlags;
+        public D3D11_RESOURCE_MISC_FLAG MiscFlags;
     }
 
     public enum D3D11_COUNTER
@@ -2023,24 +2057,157 @@ namespace D3D11
         public float Multiplier;
     }
 
-    public enum D3D11_RESOURCE_MISC_FLAG
+    [ComImport]
+    [Guid("a04bfb29-08ef-43d6-a49c-a9bdbdcbe686")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface ID3D11Device1 : ID3D11Device
     {
-        D3D11_RESOURCE_MISC_GENERATE_MIPS = 0x1,
-        D3D11_RESOURCE_MISC_SHARED = 0x2,
-        D3D11_RESOURCE_MISC_TEXTURECUBE = 0x4,
-        D3D11_RESOURCE_MISC_DRAWINDIRECT_ARGS = 0x10,
-        D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS = 0x20,
-        D3D11_RESOURCE_MISC_BUFFER_STRUCTURED = 0x40,
-        D3D11_RESOURCE_MISC_RESOURCE_CLAMP = 0x80,
-        D3D11_RESOURCE_MISC_SHARED_KEYEDMUTEX = 0x100,
-        D3D11_RESOURCE_MISC_GDI_COMPATIBLE = 0x200,
-        D3D11_RESOURCE_MISC_SHARED_NTHANDLE = 0x800,
-        D3D11_RESOURCE_MISC_RESTRICTED_CONTENT = 0x1000,
-        D3D11_RESOURCE_MISC_RESTRICT_SHARED_RESOURCE = 0x2000,
-        D3D11_RESOURCE_MISC_RESTRICT_SHARED_RESOURCE_DRIVER = 0x4000,
-        D3D11_RESOURCE_MISC_GUARDED = 0x8000,
-        D3D11_RESOURCE_MISC_TILE_POOL = 0x20000,
-        D3D11_RESOURCE_MISC_TILED = 0x40000,
-        D3D11_RESOURCE_MISC_HW_PROTECTED = 0x80000
+        #region <ID3D11Device>
+        [PreserveSig]
+        new HRESULT CreateBuffer(ref D3D11_BUFFER_DESC pDesc, IntPtr pInitialData, out ID3D11Buffer ppBuffer);
+        [PreserveSig]
+        new HRESULT CreateTexture1D(ref D3D11_TEXTURE1D_DESC pDesc, IntPtr pInitialData, out ID3D11Texture1D ppTexture1D);
+        [PreserveSig]
+        new HRESULT CreateTexture2D(ref D3D11_TEXTURE2D_DESC pDesc, IntPtr pInitialData, out ID3D11Texture2D ppTexture2D);
+        [PreserveSig]
+        new HRESULT CreateTexture3D(ref D3D11_TEXTURE3D_DESC pDesc, IntPtr pInitialData, out ID3D11Texture3D ppTexture3D);
+        [PreserveSig]
+        new HRESULT CreateShaderResourceView(ID3D11Resource pResource, D3D11_SHADER_RESOURCE_VIEW_DESC pDesc, out ID3D11ShaderResourceView ppSRView);
+        [PreserveSig]
+        new HRESULT CreateUnorderedAccessView(ID3D11Resource pResource, D3D11_UNORDERED_ACCESS_VIEW_DESC pDesc, out ID3D11UnorderedAccessView ppUAView);
+        //new HRESULT CreateRenderTargetView(ID3D11Resource pResource, D3D11_RENDER_TARGET_VIEW_DESC pDesc, out ID3D11RenderTargetView ppRTView);
+        [PreserveSig]
+        new HRESULT CreateRenderTargetView(ID3D11Resource pResource, IntPtr pDesc, out ID3D11RenderTargetView ppRTView);
+        [PreserveSig]
+        new HRESULT CreateDepthStencilView(ID3D11Resource pResource, D3D11_DEPTH_STENCIL_VIEW_DESC pDesc, out ID3D11DepthStencilView ppDepthStencilView);
+        [PreserveSig]
+        new HRESULT CreateInputLayout(ref D3D11_INPUT_ELEMENT_DESC pInputElementDescs, uint NumElements, IntPtr pShaderBytecodeWithInputSignature, uint BytecodeLength, out ID3D11InputLayout ppInputLayout);
+        [PreserveSig]
+        new HRESULT CreateVertexShader(IntPtr pShaderBytecode, uint BytecodeLength, ID3D11ClassLinkage pClassLinkage, out ID3D11VertexShader ppVertexShader);
+        [PreserveSig]
+        new HRESULT CreateGeometryShader(IntPtr pShaderBytecode, uint BytecodeLength, ID3D11ClassLinkage pClassLinkage, out ID3D11GeometryShader ppGeometryShader);
+        [PreserveSig]
+        new HRESULT CreateGeometryShaderWithStreamOutput(ID3D11Resource pResource, D3D11_UNORDERED_ACCESS_VIEW_DESC pDesc, out ID3D11UnorderedAccessView ppUAView);
+        [PreserveSig]
+        new HRESULT CreatePixelShader(IntPtr pShaderBytecode, uint BytecodeLength, ID3D11ClassLinkage pClassLinkage, out ID3D11PixelShader ppPixelShader);
+        [PreserveSig]
+        new HRESULT CreateHullShader(IntPtr pShaderBytecode, uint BytecodeLength, ID3D11ClassLinkage pClassLinkage, out ID3D11HullShader ppHullShader);
+        [PreserveSig]
+        new HRESULT CreateDomainShader(IntPtr pShaderBytecode, uint BytecodeLength, ID3D11ClassLinkage pClassLinkage, out ID3D11DomainShader ppDomainShader);
+        [PreserveSig]
+        new HRESULT CreateComputeShader(IntPtr pShaderBytecode, uint BytecodeLength, ID3D11ClassLinkage pClassLinkage, out ID3D11ComputeShader ppComputeShader);
+        [PreserveSig]
+        new HRESULT CreateClassLinkage(out ID3D11ClassLinkage ppLinkage);
+        [PreserveSig]
+        new HRESULT CreateBlendState(ref D3D11_BLEND_DESC pBlendStateDesc, out ID3D11BlendState ppBlendState);
+        [PreserveSig]
+        new HRESULT CreateDepthStencilState(ref D3D11_DEPTH_STENCIL_DESC pDepthStencilDesc, out ID3D11DepthStencilState ppDepthStencilState);
+        [PreserveSig]
+        new HRESULT CreateRasterizerState(ref D3D11_RASTERIZER_DESC pRasterizerDesc, out ID3D11RasterizerState ppRasterizerState);
+        [PreserveSig]
+        new HRESULT CreateSamplerState(ref D3D11_SAMPLER_DESC pSamplerDesc, out ID3D11SamplerState ppSamplerState);
+        [PreserveSig]
+        new HRESULT CreateQuery(ref D3D11_QUERY_DESC pQueryDesc, out ID3D11Query ppQuery);
+        [PreserveSig]
+        new HRESULT CreatePredicate(ref D3D11_QUERY_DESC pPredicateDesc, out ID3D11Predicate ppPredicate);
+        [PreserveSig]
+        new HRESULT CreateCounter(ref D3D11_COUNTER_DESC pCounterDesc, out ID3D11Counter ppCounter);
+        [PreserveSig]
+        new HRESULT CreateDeferredContext(uint ContextFlags, out ID3D11DeviceContext ppDeferredContext);
+        [PreserveSig]
+        new HRESULT OpenSharedResource(IntPtr hResource, ref Guid ReturnedInterface, out IntPtr ppResource);
+        new HRESULT CheckFormatSupport(DXGI_FORMAT Format, out uint pFormatSupport);
+        new HRESULT CheckMultisampleQualityLevels(DXGI_FORMAT Format, uint SampleCount, out uint pNumQualityLevels);
+        new void CheckCounterInfo(out D3D11_COUNTER_INFO pCounterInfo);
+        new HRESULT CheckCounter(ref D3D11_COUNTER_DESC pDesc, out D3D11_COUNTER_TYPE pType, out uint pActiveCounters,
+                    out string szName, ref uint pNameLength, out string szUnits, ref uint pUnitsLength,
+                           out string szDescription, ref uint pDescriptionLength);
+        new HRESULT CheckFeatureSupport(D3D11_FEATURE Feature, out IntPtr pFeatureSupportData, uint FeatureSupportDataSize);
+        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        new D3D_FEATURE_LEVEL GetFeatureLevel();
+        new uint GetCreationFlags();
+        new HRESULT GetDeviceRemovedReason();
+        new void GetImmediateContext(out ID3D11DeviceContext ppImmediateContext);
+        new HRESULT SetExceptionMode(uint RaiseFlags);
+        new uint GetExceptionMode();
+        #endregion
+
+        //void GetImmediateContext1(out ID3D11DeviceContext1 ppImmediateContext);
+        void GetImmediateContext1(out IntPtr ppImmediateContext);
+        //HRESULT CreateDeferredContext1(uint ContextFlags, out ID3D11DeviceContext1 ppDeferredContext);
+        HRESULT CreateDeferredContext1(uint ContextFlags, out IntPtr ppDeferredContext);
+        //HRESULT CreateBlendState1(ref D3D11_BLEND_DESC1 pBlendStateDesc, out ID3D11BlendState1 ppBlendState);
+        HRESULT CreateBlendState1(ref D3D11_BLEND_DESC1 pBlendStateDesc, out IntPtr ppBlendState);
+        //HRESULT CreateRasterizerState1(ref D3D11_RASTERIZER_DESC1 pRasterizerDesc, out ID3D11RasterizerState1 ppRasterizerState);
+        HRESULT CreateRasterizerState1(ref D3D11_RASTERIZER_DESC1 pRasterizerDesc, out IntPtr ppRasterizerState);
+        //HRESULT CreateDeviceContextState(uint Flags, D3D_FEATURE_LEVEL pFeatureLevels, uint FeatureLevels,
+        //   uint SDKVersion, ref Guid EmulatedInterface, out D3D_FEATURE_LEVEL pChosenFeatureLevel, out ID3DDeviceContextState ppContextState);
+        HRESULT CreateDeviceContextState(uint Flags, D3D_FEATURE_LEVEL pFeatureLevels, uint FeatureLevels,
+        uint SDKVersion, ref Guid EmulatedInterface, out D3D_FEATURE_LEVEL pChosenFeatureLevel, out IntPtr ppContextState);
+        HRESULT OpenSharedResource1(IntPtr hResource, ref Guid returnedInterface, out IntPtr ppResource);
+        HRESULT OpenSharedResourceByName(string lpName, uint dwDesiredAccess, ref Guid returnedInterface, out IntPtr ppResource);
     }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct D3D11_BLEND_DESC1
+    {
+        public bool AlphaToCoverageEnable;
+        public bool IndependentBlendEnable;
+        [MarshalAs(UnmanagedType.LPStruct, SizeConst = 8)]
+        public D3D11_RENDER_TARGET_BLEND_DESC1 RenderTarget;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct D3D11_RENDER_TARGET_BLEND_DESC1
+    {
+        public bool BlendEnable;
+        public bool LogicOpEnable;
+        public D3D11_BLEND SrcBlend;
+        public D3D11_BLEND DestBlend;
+        public D3D11_BLEND_OP BlendOp;
+        public D3D11_BLEND SrcBlendAlpha;
+        public D3D11_BLEND DestBlendAlpha;
+        public D3D11_BLEND_OP BlendOpAlpha;
+        public D3D11_LOGIC_OP LogicOp;
+        public byte RenderTargetWriteMask;
+    }
+
+    public enum D3D11_LOGIC_OP
+    {
+        D3D11_LOGIC_OP_CLEAR = 0,
+        D3D11_LOGIC_OP_SET = (D3D11_LOGIC_OP_CLEAR + 1),
+        D3D11_LOGIC_OP_COPY = (D3D11_LOGIC_OP_SET + 1),
+        D3D11_LOGIC_OP_COPY_INVERTED = (D3D11_LOGIC_OP_COPY + 1),
+        D3D11_LOGIC_OP_NOOP = (D3D11_LOGIC_OP_COPY_INVERTED + 1),
+        D3D11_LOGIC_OP_INVERT = (D3D11_LOGIC_OP_NOOP + 1),
+        D3D11_LOGIC_OP_AND = (D3D11_LOGIC_OP_INVERT + 1),
+        D3D11_LOGIC_OP_NAND = (D3D11_LOGIC_OP_AND + 1),
+        D3D11_LOGIC_OP_OR = (D3D11_LOGIC_OP_NAND + 1),
+        D3D11_LOGIC_OP_NOR = (D3D11_LOGIC_OP_OR + 1),
+        D3D11_LOGIC_OP_XOR = (D3D11_LOGIC_OP_NOR + 1),
+        D3D11_LOGIC_OP_EQUIV = (D3D11_LOGIC_OP_XOR + 1),
+        D3D11_LOGIC_OP_AND_REVERSE = (D3D11_LOGIC_OP_EQUIV + 1),
+        D3D11_LOGIC_OP_AND_INVERTED = (D3D11_LOGIC_OP_AND_REVERSE + 1),
+        D3D11_LOGIC_OP_OR_REVERSE = (D3D11_LOGIC_OP_AND_INVERTED + 1),
+        D3D11_LOGIC_OP_OR_INVERTED = (D3D11_LOGIC_OP_OR_REVERSE + 1)
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct D3D11_RASTERIZER_DESC1
+    {
+        public D3D11_FILL_MODE FillMode;
+        public D3D11_CULL_MODE CullMode;
+        public bool FrontCounterClockwise;
+        public int DepthBias;
+        public float DepthBiasClamp;
+        public float SlopeScaledDepthBias;
+        public bool DepthClipEnable;
+        public bool ScissorEnable;
+        public bool MultisampleEnable;
+        public bool AntialiasedLineEnable;
+        public uint ForcedSampleCount;
+    }
+
 }

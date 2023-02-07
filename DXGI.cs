@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 using System.Runtime.InteropServices;
 using GlobalStructures;
+using System.Reflection.Metadata;
+using System.Security.Permissions;
+using D3D11;
 
 namespace DXGI
 {  
@@ -174,6 +177,7 @@ namespace DXGI
         new HRESULT GetDevice(ref Guid riid, out IntPtr ppDevice);
         #endregion
 
+        [PreserveSig]
         HRESULT GetSharedHandle(out IntPtr pSharedHandle);
         HRESULT GetUsage(out uint pUsage);
         HRESULT SetEvictionPriority(uint EvictionPriority);
@@ -198,6 +202,7 @@ namespace DXGI
         HRESULT GetFrameDirtyRects(uint DirtyRectsBufferSize, out RECT pDirtyRectsBuffer, out uint pDirtyRectsBufferSizeRequired);
         HRESULT GetFrameMoveRects(uint MoveRectsBufferSize, out DXGI_OUTDUPL_MOVE_RECT pMoveRectBuffer, out uint pMoveRectsBufferSizeRequired);
         HRESULT GetFramePointerShape(uint PointerShapeBufferSize, out IntPtr pPointerShapeBuffer, out uint pPointerShapeBufferSizeRequired, out DXGI_OUTDUPL_POINTER_SHAPE_INFO pPointerShapeInfo);
+        [PreserveSig]
         HRESULT MapDesktopSurface(out DXGI_MAPPED_RECT pLockedRect);
         HRESULT UnMapDesktopSurface();
         HRESULT ReleaseFrame();
@@ -1112,9 +1117,9 @@ namespace DXGI
         public DXGI_FORMAT Format;
         public DXGI_SAMPLE_DESC SampleDesc;
         public D3D11_USAGE Usage;
-        public uint BindFlags;
-        public uint CPUAccessFlags;
-        public uint MiscFlags;
+        public D3D11_BIND_FLAG BindFlags;
+        public D3D11_CPU_ACCESS_FLAG CPUAccessFlags;
+        public D3D11_RESOURCE_MISC_FLAG MiscFlags;
     }
     public enum D3D11_USAGE
     {
@@ -1134,7 +1139,63 @@ namespace DXGI
         HRESULT GetUnknown(ref Guid guid, ref Guid riid, out IntPtr ppvObject);
         HRESULT SetUnknown(ref Guid guid, IntPtr pUnkData);
     }
- 
+
+    [ComImport]
+    [Guid("9d8e1289-d7b3-465f-8126-250e349af85d")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IDXGIKeyedMutex : IDXGIDeviceSubObject
+    {
+        #region <IDXGIDeviceSubObject>
+        #region <IDXGIObject>
+        new HRESULT SetPrivateData(ref Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface(ref Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData(ref Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent(ref Guid riid, out IntPtr ppParent);
+        #endregion
+
+        new HRESULT GetDevice(ref Guid riid, out IntPtr ppDevice);
+        #endregion
+
+        HRESULT AcquireSync(UInt64 Key, uint dwMilliseconds);
+        HRESULT ReleaseSync(UInt64 Key);
+    }
+
+    [ComImport]
+    [Guid("30961379-4609-4a41-998e-54fe567ee0c1")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IDXGIResource1 : IDXGIResource
+    {
+        #region <IDXGIResource>
+        #region <IDXGIDeviceSubObject>
+        #region <IDXGIObject>
+        new HRESULT SetPrivateData(ref Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface(ref Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData(ref Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent(ref Guid riid, out IntPtr ppParent);
+        #endregion
+
+        new HRESULT GetDevice(ref Guid riid, out IntPtr ppDevice);
+        #endregion
+
+        [PreserveSig]
+        new HRESULT GetSharedHandle(out IntPtr pSharedHandle);
+        new HRESULT GetUsage(out uint pUsage);
+        new HRESULT SetEvictionPriority(uint EvictionPriority);
+        new HRESULT GetEvictionPriority(out uint pEvictionPriority);
+        #endregion
+
+        HRESULT CreateSubresourceSurface(uint index, out IDXGISurface2 ppSurface);
+        [PreserveSig]
+        //HRESULT CreateSharedHandle(SECURITY_ATTRIBUTES pAttributes, uint dwAccess, string lpName, out IntPtr pHandle);
+        HRESULT CreateSharedHandle(IntPtr pAttributes, uint dwAccess, string lpName, out IntPtr pHandle);
+    }
+
+
+
+
+
+
+
 
     public class DXGITools
     {
@@ -1213,6 +1274,11 @@ namespace DXGI
         public const int DXGI_USAGE_READ_ONLY = 0x00000100;
         public const int DXGI_USAGE_DISCARD_ON_PRESENT = 0x00000200;
         public const int DXGI_USAGE_UNORDERED_ACCESS = 0x00000400;
+
+        public const int DXGI_ENUM_MODES_STEREO = (4);
+        public const int DXGI_ENUM_MODES_DISABLED_STEREO = (8);
+        public const uint DXGI_SHARED_RESOURCE_READ = unchecked(((uint)0x80000000));
+        public const uint DXGI_SHARED_RESOURCE_WRITE = (1);
 
         //
         // DXGI status (success) codes
