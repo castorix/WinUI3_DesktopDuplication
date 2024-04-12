@@ -10,9 +10,9 @@
     <PublishProfile>win10-$(Platform).pubxml</PublishProfile>
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
-    <WindowsPackageType>None</WindowsPackageType>
-	  	<!-- For Bug in x64 : System.DllNotFoundException: 'Unable to load DLL 'Microsoft.ui.xaml.dll' or one of its dependencies: Accès refusé. (0x80070005 (E_ACCESSDENIED))'-->
-	<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained> 
+		<WindowsPackageType>None</WindowsPackageType>
+    <!-- For Bug in x64 : System.DllNotFoundException: 'Unable to load DLL 'Microsoft.ui.xaml.dll' or one of its dependencies: Accès refusé. (0x80070005 (E_ACCESSDENIED))'-->
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained> 
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,8 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.0" />
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.25211-preview" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.230822000" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26031-preview" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 

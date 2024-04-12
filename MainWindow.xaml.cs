@@ -133,6 +133,19 @@ namespace WinUI3_DesktopDuplication
         [DllImport("Kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern bool CloseHandle(IntPtr hObject);
 
+        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode, EntryPoint = "SetWindowDisplayAffinity")]
+        public static extern bool SWDA(IntPtr hWnd, uint dwAffinity);
+
+        public const int WDA_NONE = 0x00000000;
+        public const int WDA_MONITOR = 0x00000001;
+        public const int WDA_EXCLUDEFROMCAPTURE = 0x00000011;
+
+        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+
+        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
 
         IDXGIDevice1 m_pDXGIDevice = null;
         IntPtr m_pD3D11DevicePtr = IntPtr.Zero;
@@ -152,7 +165,7 @@ namespace WinUI3_DesktopDuplication
             this.InitializeComponent();
             hWnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
 
-            ContainerPanel1.ContainerPanelInit("msctls_hotkey32", "", hWnd);
+            ContainerPanel1.ContainerPanelInit(this, "msctls_hotkey32", "", hWnd);
             ContainerPanel1.SetOpacity(ContainerPanel1.hWndContainer, 100);
             m_nAtom = GlobalAddAtom("HotKey");
 
@@ -163,6 +176,10 @@ namespace WinUI3_DesktopDuplication
   
             Application.Current.Resources["ButtonBackgroundPressed"] = new SolidColorBrush(Microsoft.UI.Colors.LightSteelBlue);
             Application.Current.Resources["ButtonBackgroundPointerOver"] = new SolidColorBrush(Microsoft.UI.Colors.RoyalBlue);
+
+            //IntPtr hWndNotepad = FindWindow("Notepad", null);
+            bRet = SWDA(hWnd, (uint)WDA_EXCLUDEFROMCAPTURE);
+            //int nErr = Marshal.GetLastWin32Error();
 
             this.Closed += MainWindow_Closed;
         }
