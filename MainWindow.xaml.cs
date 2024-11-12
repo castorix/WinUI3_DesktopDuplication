@@ -125,6 +125,11 @@ namespace WinUI3_DesktopDuplication
         public const int MOD_WIN = 0x8;
         public const int MOD_NOREPEAT = 0x4000;
 
+        public const int HOTKEYF_SHIFT = 0x01;
+        public const int HOTKEYF_CONTROL = 0x02;
+        public const int HOTKEYF_ALT = 0x04;
+        public const int HOTKEYF_EXT = 0x08;
+
         public const int WM_HOTKEY = 0x312;
 
         [DllImport("User32.dll", SetLastError = true)]
@@ -383,8 +388,18 @@ namespace WinUI3_DesktopDuplication
                                 //SendMessage(hWnd, WM_SETHOTKEY, wHotkey, IntPtr.Zero);
                                 byte byteVirtualKey = LOBYTE((short)LOWORD(wHotkey));
                                 byte byteKeyModifier = HIBYTE((short)LOWORD(wHotkey));
+
+                                byte byteConvertedModifier = (byte)(byteKeyModifier | MOD_NOREPEAT);
+                                if ((byteConvertedModifier & HOTKEYF_SHIFT) != 0 && (byteConvertedModifier & ~MOD_SHIFT) != 0)
+                                {
+                                    byteConvertedModifier = (byte)((byteConvertedModifier & ~HOTKEYF_SHIFT) | MOD_SHIFT);
+                                }
+                                else if ((byteConvertedModifier & HOTKEYF_ALT) != 0)
+                                {
+                                    byteConvertedModifier = (byte)((byteConvertedModifier & ~HOTKEYF_ALT) | MOD_ALT);
+                                }
                                 UnregisterHotKey(hWnd, m_nAtom);
-                                bool bRet = RegisterHotKey(hWnd, m_nAtom, byteKeyModifier, byteVirtualKey);
+                                bool bRet = RegisterHotKey(hWnd, m_nAtom, byteConvertedModifier, byteVirtualKey);
                                 if (!bRet)
                                 {
                                     int nErr = Marshal.GetLastWin32Error();
