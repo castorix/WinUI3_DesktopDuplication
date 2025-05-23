@@ -170,7 +170,7 @@ namespace WinUI3_DesktopDuplication
             this.InitializeComponent();
             hWnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
 
-            ContainerPanel1.ContainerPanelInit(this, "msctls_hotkey32", "", hWnd);
+            ContainerPanel1.ContainerPanelInit("msctls_hotkey32", "", hWnd);
             ContainerPanel1.SetOpacity(ContainerPanel1.hWndContainer, 100);
             m_nAtom = GlobalAddAtom("HotKey");
 

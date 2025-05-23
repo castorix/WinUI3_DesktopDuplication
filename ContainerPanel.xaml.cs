@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+﻿using ABI.Windows.Foundation;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -17,7 +18,7 @@ using Windows.Foundation.Collections;
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace WinUI3_DesktopDuplication
+namespace WinUI3_ContainerPanel
 {
     public sealed partial class ContainerPanel : UserControl
     {
@@ -248,43 +249,69 @@ namespace WinUI3_DesktopDuplication
         [DllImport("Kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern int MulDiv(int nNumber, int nNumerator, int nDenominator);
 
-        public delegate int SUBCLASSPROC(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam, IntPtr uIdSubclass, uint dwRefData);
+        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
-        [DllImport("Comctl32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern bool SetWindowSubclass(IntPtr hWnd, SUBCLASSPROC pfnSubclass, uint uIdSubclass, uint dwRefData);
-
-        [DllImport("Comctl32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern int DefSubclassProc(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam);
-
-        public const int WM_SIZE = 0x0005;
-        public const int WM_USER = 0x0400;
-        
+        public const int SWP_NOSIZE = 0x0001;
+        public const int SWP_NOMOVE = 0x0002;
+        public const int SWP_NOZORDER = 0x0004;
+        public const int SWP_NOREDRAW = 0x0008;
+        public const int SWP_NOACTIVATE = 0x0010;
+        public const int SWP_FRAMECHANGED = 0x0020;  /* The frame changed: send WM_NCCALCSIZE */
+        public const int SWP_SHOWWINDOW = 0x0040;
+        public const int SWP_HIDEWINDOW = 0x0080;
+        public const int SWP_NOCOPYBITS = 0x0100;
+        public const int SWP_NOOWNERZORDER = 0x0200;  /* Don't do owner Z ordering */
+        public const int SWP_NOSENDCHANGING = 0x0400;  /* Don't send WM_WINDOWPOSCHANGING */
+        public const int SWP_DRAWFRAME = SWP_FRAMECHANGED;
+        public const int SWP_NOREPOSITION = SWP_NOOWNERZORDER;
+        public const int SWP_DEFERERASE = 0x2000;
+        public const int SWP_ASYNCWINDOWPOS = 0x4000;
 
         [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern int PostMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+        public static extern IntPtr GetWindow(IntPtr hwnd, uint uCmd);
 
+        public const int GW_HWNDFIRST = 0;
+        public const int GW_HWNDLAST = 1;
+        public const int GW_HWNDNEXT = 2;
+        public const int GW_HWNDPREV = 3;
+        public const int GW_OWNER = 4;
+        public const int GW_CHILD = 5;
+        public const int GW_ENABLEDPOPUP = 6;
 
-        private SUBCLASSPROC SubClassDelegate;
+        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int left;
+            public int top;
+            public int right;
+            public int bottom;
+            public RECT(int Left, int Top, int Right, int Bottom)
+            {
+                left = Left;
+                top = Top;
+                right = Right;
+                bottom = Bottom;
+            }
+        }
+
 
         private IntPtr _hWndParent = IntPtr.Zero;
         public IntPtr hWndContainer = IntPtr.Zero;
 
         public ContainerPanel()
         {
-            this.InitializeComponent();           
+            this.InitializeComponent();
             this.SizeChanged += ContainerPanel_SizeChanged;
             this.Loaded += ContainerPanel_Loaded;
         }
 
-        //private void Parent_SizeChanged(object sender, SizeChangedEventArgs e)
-        //{
-        //    Console.Beep(5000, 10);
-        //}
-
         private void ContainerPanel_Loaded(object sender, RoutedEventArgs e)
         {
             this.Content.XamlRoot.Changed += XamlRoot_Changed;
-            //((FrameworkElement)this.Parent).SizeChanged += Parent_SizeChanged;
         }
 
         private void XamlRoot_Changed(XamlRoot sender, XamlRootChangedEventArgs args)
@@ -298,8 +325,16 @@ namespace WinUI3_DesktopDuplication
             sz.Y *= (float)nScale;
             MoveWindow(hWndContainer, (int)offset.X, (int)offset.Y, (int)sz.X, (int)sz.Y, true);
 
+            IntPtr hWndChild = GetWindow(hWndContainer, GW_CHILD);
+            if (hWndChild != IntPtr.Zero)
+            {
+                RECT rect;
+                GetClientRect(hWndContainer, out rect);
+                MoveWindow(hWndChild, 0, 0, rect.right - rect.left, rect.bottom - rect.top, true);
+            }
+
             // Should resize width too...
-            ChangeFontSize(16, (float)nScale);
+            //ChangeFontSize(16, (float)nScale);
         }
 
         private void ContainerPanel_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -318,8 +353,16 @@ namespace WinUI3_DesktopDuplication
                 sz.Y *= (float)nScale;
                 MoveWindow(hWndContainer, (int)offset.X, (int)offset.Y, (int)sz.X, (int)sz.Y, true);
 
+                IntPtr hWndChild = GetWindow(hWndContainer, GW_CHILD);
+                if (hWndChild != IntPtr.Zero)
+                {
+                    RECT rect;
+                    GetClientRect(hWndContainer, out rect);
+                    MoveWindow(hWndChild, 0, 0, rect.right - rect.left, rect.bottom - rect.top, true);
+                }
+
                 // Should resize width too...
-                ChangeFontSize(16, (float)nScale);                
+                //ChangeFontSize(16, (float)nScale);              
             }
         }
 
@@ -342,151 +385,26 @@ namespace WinUI3_DesktopDuplication
             SendMessage(hWndContainer, WM_SETFONT, hFontNew, (IntPtr)1);
         }
    
-        public void ContainerPanelInit(MainWindow mw, string sClass, string sText, IntPtr hWndParent)
+        public void ContainerPanelInit(string sClass, string sText, IntPtr hWndParent)
         {
-            //mw.VisibilityChanged += Mw_VisibilityChanged;
             //var currentMainWindow = ((App)Application.Current).m_window;
             if (hWndParent != IntPtr.Zero)
             {
                 _hWndParent = hWndParent;
+                //hWndContainer = CreateWindowEx(WS_EX_LAYERED | WS_EX_TRANSPARENT, sClass, sText, WS_VISIBLE | WS_CHILD, 0, 0, (int)this.ActualWidth, (int)this.ActualHeight, _hWndParent, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
                 hWndContainer = CreateWindowEx(WS_EX_LAYERED, sClass, sText, WS_VISIBLE | WS_CHILD, 0, 0, (int)this.ActualWidth, (int)this.ActualHeight, _hWndParent, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
-                //hWndContainer = CreateWindowEx(WS_EX_TRANSPARENT, "Static", "", WS_VISIBLE | WS_CHILD | WS_BORDER, 0, 0, (int)this.ActualWidth, (int)this.ActualHeight, _hWndParent, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
-                Stretch = Stretch.UniformToFill;
-                //SubClassDelegate = new SUBCLASSPROC(WindowSubClass);
-                //bool bRet = SetWindowSubclass(hWndParent, SubClassDelegate, 0, 0);
-
                 SetWindowPos(hWndContainer, IntPtr.Zero, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW | SWP_FRAMECHANGED);
-            }
+                Stretch = Stretch.UniformToFill;
+            }            
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct RECT
-        {
-            public int left;
-            public int top;
-            public int right;
-            public int bottom;
-            public RECT(int Left, int Top, int Right, int Bottom)
-            {
-                left = Left;
-                top = Top;
-                right = Right;
-                bottom = Bottom;
-            }
-        }
-
-        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-
-        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-
-        public const int SWP_NOSIZE = 0x0001;
-        public const int SWP_NOMOVE = 0x0002;
-        public const int SWP_NOZORDER = 0x0004;
-        public const int SWP_NOREDRAW = 0x0008;
-        public const int SWP_NOACTIVATE = 0x0010;
-        public const int SWP_FRAMECHANGED = 0x0020;  /* The frame changed: send WM_NCCALCSIZE */
-        public const int SWP_SHOWWINDOW = 0x0040;
-        public const int SWP_HIDEWINDOW = 0x0080;
-        public const int SWP_NOCOPYBITS = 0x0100;
-        public const int SWP_NOOWNERZORDER = 0x0200;  /* Don't do owner Z ordering */
-        public const int SWP_NOSENDCHANGING = 0x0400;  /* Don't send WM_WINDOWPOSCHANGING */
-        public const int SWP_DRAWFRAME = SWP_FRAMECHANGED;
-        public const int SWP_NOREPOSITION = SWP_NOOWNERZORDER;
-        public const int SWP_DEFERERASE = 0x2000;
-        public const int SWP_ASYNCWINDOWPOS = 0x4000;
-
-
-        //bool bUpdated = false;
-        //private void Mw_VisibilityChanged(object sender, WindowVisibilityChangedEventArgs args)
-        //{
-        //    if (!bUpdated)
-        //    {
-        //        RECT rc;
-        //        GetWindowRect(_hWndParent, out rc);
-        //        SetWindowPos(_hWndParent, (IntPtr)(-1), 0, 0, rc.right - rc.left - 1, rc.bottom - rc.top - 1, SWP_NOZORDER | SWP_NOMOVE | SWP_SHOWWINDOW | SWP_FRAMECHANGED);
-        //        SetWindowPos(_hWndParent, (IntPtr)(-1), 0, 0, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_NOMOVE | SWP_SHOWWINDOW | SWP_FRAMECHANGED);
-        //        bUpdated = true;
-        //    }
-        //}
-
-        //97 - uMsg = 0x02A2
-        //98 - uMsg = 0x0084
-        //99 - uMsg = 0x0245
-
-        //Resizing
-
-        //100 - uMsg = 0x0241
-        //101 - uMsg = 0x0214 WM_SIZING
-        //102 - uMsg = 0x0046 WM_WINDOWPOSCHANGING
-        //103 - uMsg = 0x0024 WM_GETMINMAXINFO
-        //104 - uMsg = 0x0083 WM_NCCALCSIZE
-        //105 - uMsg = 0x0085 WM_NCPAINT
-        //106 - uMsg = 0x0014 WM_ERASEBKGND
-        //107 - uMsg = 0x0047 WM_WINDOWPOSCHANGED
-        //108 - uMsg = 0x0005 WM_SIZE
-        //109 - uMsg = 0x0014 WM_ERASEBKGND
-        //110 - uMsg = 0x000F WM_PAINT
-        //111 - uMsg = 0x0241 WM_NCPOINTERUPDATE
-        //112 - uMsg = 0x0214 WM_SIZING
-        //113 - uMsg = 0x0046 WM_WINDOWPOSCHANGING
-        //114 - uMsg = 0x0024 WM_GETMINMAXINFO
-        //115 - uMsg = 0x0083 WM_NCCALCSIZE
-        //116 - uMsg = 0x0085 WM_NCPAINT
-        //117 - uMsg = 0x0014 WM_ERASEBKGND
-        //118 - uMsg = 0x0047 WM_WINDOWPOSCHANGED
-        //119 - uMsg = 0x0005 WM_SIZE
-        //120 - uMsg = 0x0014 WM_ERASEBKGND
-        //121 - uMsg = 0x000F WM_PAINT
-        //122 - uMsg = 0x0243 WM_NCPOINTERUP
-        //123 - uMsg = 0x0215 WM_CAPTURECHANGED
-        //124 - uMsg = 0x0046 WM_WINDOWPOSCHANGING
-        //125 - uMsg = 0x0024 WM_GETMINMAXINFO
-        //126 - uMsg = 0x0232 WM_EXITSIZEMOVE
-        //127 - uMsg = 0x0084 WM_NCHITTEST
-        //128 - uMsg = 0x0020 WM_SETCURSOR
-        //129 - uMsg = 0x00A0 WM_NCMOUSEMOVE
-        //130 - uMsg = 0x0084 WM_NCHITTEST
-        //131 - uMsg = 0x0020 WM_SETCURSOR
-        //132 - uMsg = 0x0241 WM_NCPOINTERUPDATE
-        //133 - uMsg = 0x0084 WM_NCHITTEST
-        //134 - uMsg = 0x0020 WM_SETCURSOR
-        //135 - uMsg = 0x00A0 WM_NCMOUSEMOVE
-        //136 - uMsg = 0x02A2 WM_NCMOUSELEAVE
-        //137 - uMsg = 0x024A WM_POINTERLEAVE
-        //138 - uMsg = 0x0086 WM_NCACTIVATE
-        //139 - uMsg = 0x0006 WM_ACTIVATE
-        //140 - uMsg = 0x001C WM_ACTIVATEAPP
-
-        int nMessage = 0;
-        private int WindowSubClass(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam, IntPtr uIdSubclass, uint dwRefData)
-        {
-            System.Diagnostics.Debug.WriteLine(string.Format("{0} - uMsg = 0x{1:X4}", nMessage, uMsg));
-            nMessage++;
-            switch (uMsg)
-            {               
-                //case WM_SIZE:
-                //    {
-                //        //Console.Beep(5000, 10);
-                //        PostMessage(hWnd, WM_USER, IntPtr.Zero, IntPtr.Zero);
-                //    }
-                //    break;
-
-                //case WM_USER:
-                //    {
-                //       // ...
-                //    }
-                //    break;               
-            }
-            return DefSubclassProc(hWnd, uMsg, wParam, lParam);
-        }
-
-        public ImageSource Source
+#nullable enable
+        public ImageSource? Source
         {
             get { return (ImageSource)GetValue(SourceProperty); }
             set { SetValue(SourceProperty, value); }
-        }    
+        }
+#nullable disable
 
         public static readonly DependencyProperty SourceProperty = 
             DependencyProperty.Register("Source", typeof(ImageSource),  typeof(ContainerPanel), null);
@@ -515,29 +433,39 @@ namespace WinUI3_DesktopDuplication
         }
 
         private async void CopyImage()
-        { 
+        {
+            uint nDPI = GetDpiForWindow(_hWndParent);
+            double nScale = nDPI / 96.0f;           
+
             IntPtr hDC = GetDC(IntPtr.Zero);
             IntPtr hDCMem = CreateCompatibleDC(hDC);
-            int nX = (int)this.ActualWidth;
-            int nY = (int)this.ActualHeight;
+            float nXDest = (int)this.ActualWidth;
+            int nX = (int)nXDest;
+            nXDest *= (float)nScale;
+            float nYDest = (int)this.ActualHeight;
+            int nY = (int)nYDest;
+            nYDest *= (float)nScale;
             BITMAPINFO bi = new BITMAPINFO();
             bi.bmiHeader.biSize = Marshal.SizeOf(typeof(BITMAPINFOHEADER));
-            bi.bmiHeader.biWidth = nX;
-            bi.bmiHeader.biHeight = -nY;
+            bi.bmiHeader.biWidth = (int)(nXDest);
+            bi.bmiHeader.biHeight = (int)(-nYDest);
             bi.bmiHeader.biPlanes = 1;
             bi.bmiHeader.biBitCount = 32;
             bi.bmiHeader.biCompression = BI_RGB;
+            bi.bmiHeader.biXPelsPerMeter = (int)nDPI;
+            bi.bmiHeader.biYPelsPerMeter = (int)nDPI;
             IntPtr pBits = IntPtr.Zero;
             IntPtr hBitmap = CreateDIBSection(hDC, ref bi, DIB_RGB_COLORS, ref pBits, IntPtr.Zero, 0);
             if (hBitmap != IntPtr.Zero)
             {
                 IntPtr hBitmapOld = SelectObject(hDCMem, hBitmap);
                 PrintWindow(hWndContainer, hDCMem, PW_RENDERFULLCONTENT);
-                //BitBlt(hDC, 0, 0, nX, nY, hDCMem, 0, 0, SRCCOPY);
-                int nSize = nX * nY * 4;
+                //BitBlt(hDC, 0, 0, (int)nXDest, (int)nYDest, hDCMem, 0, 0, SRCCOPY);
+                int nSize = (int)(bi.bmiHeader.biWidth * nYDest * bi.bmiHeader.biBitCount / 8); //8 = bits per byte
                 byte[] pManagedArray = new byte[nSize];
-                Marshal.Copy(new IntPtr(pBits.ToInt32()), pManagedArray, 0, nSize);
-                Microsoft.UI.Xaml.Media.Imaging.WriteableBitmap wb = new Microsoft.UI.Xaml.Media.Imaging.WriteableBitmap(nX, nY);
+                //Marshal.Copy(new IntPtr(pBits.ToInt32()), pManagedArray, 0, pManagedArray.Length);
+                Marshal.Copy(pBits, pManagedArray, 0, pManagedArray.Length);
+                Microsoft.UI.Xaml.Media.Imaging.WriteableBitmap wb = new Microsoft.UI.Xaml.Media.Imaging.WriteableBitmap((int)(nXDest), (int)(nYDest));
                 await wb.PixelBuffer.AsStream().WriteAsync(pManagedArray, 0, pManagedArray.Length);
                 this.Source = wb;
 

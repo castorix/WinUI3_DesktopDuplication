@@ -10,6 +10,7 @@ using DXGI;
 using static DXGI.DXGITools;
 using System.Reflection.Metadata;
 using Microsoft.UI.Xaml.Controls;
+using System.Runtime.CompilerServices;
 
 namespace D3D11
 {
@@ -24,10 +25,14 @@ namespace D3D11
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface ID3D11DeviceChild
     {
+        [PreserveSig]
         void GetDevice(out ID3D11Device ppDevice);
-        HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
     }
 
     [ComImport]
@@ -36,14 +41,21 @@ namespace D3D11
     public interface ID3D11Resource : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         void GetType(out D3D11_RESOURCE_DIMENSION pResourceDimension);
+        [PreserveSig]
         void SetEvictionPriority(uint EvictionPriority);
+        [PreserveSig]
         uint GetEvictionPriority();
     }
 
@@ -64,17 +76,25 @@ namespace D3D11
 
         #region ID3D11Resource
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         new void GetType(out D3D11_RESOURCE_DIMENSION pResourceDimension);
+        [PreserveSig]
         new void SetEvictionPriority(uint EvictionPriority);
+        [PreserveSig]
         new uint GetEvictionPriority();
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_BUFFER_DESC pDesc);
     }
 
@@ -103,12 +123,17 @@ namespace D3D11
     public interface ID3D11View : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         void GetResource(out ID3D11Resource ppResource);
     }
 
@@ -119,15 +144,21 @@ namespace D3D11
     {
         #region ID3D11View
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         new void GetResource(out ID3D11Resource ppResource);
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_SHADER_RESOURCE_VIEW_DESC pDesc);
     }
 
@@ -210,10 +241,14 @@ namespace D3D11
     public interface ID3D11PixelShader : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion        
     }
 
@@ -223,15 +258,23 @@ namespace D3D11
     public interface ID3D11ClassInstance : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         void GetClassLinkage(out ID3D11ClassLinkage ppLinkage);
+        [PreserveSig]
         void GetDesc(out D3D11_CLASS_INSTANCE_DESC pDesc);
+        [PreserveSig]
         void GetInstanceName(out System.Text.StringBuilder pInstanceName, ref uint pBufferLength);
+        [PreserveSig]
         void GetTypeName(out System.Text.StringBuilder pTypeName, ref uint pBufferLength);
     }
 
@@ -254,13 +297,19 @@ namespace D3D11
     public interface ID3D11ClassLinkage : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         HRESULT GetClassInstance(string pClassInstanceName, uint InstanceIndex, out ID3D11ClassInstance ppInstance);
+        [PreserveSig]
         HRESULT CreateClassInstance(string pClassTypeName, uint ConstantBufferOffset, uint ConstantVectorOffset, uint TextureOffset, uint SamplerOffset, out ID3D11ClassInstance ppInstance);
     }
 
@@ -270,12 +319,17 @@ namespace D3D11
     public interface ID3D11SamplerState : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_SAMPLER_DESC pDesc);
     }
 
@@ -362,10 +416,14 @@ namespace D3D11
     public interface ID3D11VertexShader : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion        
     }   
 
@@ -375,10 +433,14 @@ namespace D3D11
     public interface ID3D11InputLayout : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion        
     }
 
@@ -388,10 +450,14 @@ namespace D3D11
     public interface ID3D11GeometryShader : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion        
     }
 
@@ -401,12 +467,17 @@ namespace D3D11
     public interface ID3D11Asynchronous : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         uint GetDataSize();
     }
 
@@ -417,18 +488,23 @@ namespace D3D11
     {
         #region ID3D11Asynchronous
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         new uint GetDataSize();
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_QUERY_DESC pDesc);
     }
-
 
     [StructLayout(LayoutKind.Sequential)]
     public struct D3D11_QUERY_DESC
@@ -465,13 +541,19 @@ namespace D3D11
         #region ID3D11Query
         #region ID3D11Asynchronous
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
+        [PreserveSig]
         new uint GetDataSize();
         #endregion
+        [PreserveSig]
         new void GetDesc(out D3D11_QUERY_DESC pDesc);
         #endregion
     }
@@ -483,14 +565,20 @@ namespace D3D11
     {
         #region ID3D11View
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
+        [PreserveSig]
         new void GetResource(out ID3D11Resource ppResource);
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_RENDER_TARGET_VIEW_DESC pDesc);
     }
 
@@ -532,14 +620,21 @@ namespace D3D11
     {
         #region ID3D11View
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
+
+        [PreserveSig]
         new void GetResource(out ID3D11Resource ppResource);
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_DEPTH_STENCIL_VIEW_DESC pDesc);
     }
 
@@ -578,14 +673,21 @@ namespace D3D11
     {
         #region ID3D11View
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
+
+        [PreserveSig]
         new void GetResource(out ID3D11Resource ppResource);
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_UNORDERED_ACCESS_VIEW_DESC pDesc);
     }
 
@@ -623,12 +725,17 @@ namespace D3D11
     public interface ID3D11BlendState : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_BLEND_DESC pDesc);
     }
 
@@ -690,12 +797,17 @@ namespace D3D11
     public interface ID3D11DepthStencilState : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_DEPTH_STENCIL_DESC pDesc);
     }
 
@@ -744,12 +856,17 @@ namespace D3D11
     public interface ID3D11RasterizerState : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_RASTERIZER_DESC pDesc);
     }
 
@@ -798,12 +915,17 @@ namespace D3D11
     public interface ID3D11CommandList : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         uint GetContextFlags();
     }
 
@@ -824,10 +946,14 @@ namespace D3D11
     public interface ID3D11HullShader : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion        
     }
 
@@ -837,10 +963,14 @@ namespace D3D11
     public interface ID3D11DomainShader : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion        
     }
 
@@ -850,10 +980,14 @@ namespace D3D11
     public interface ID3D11ComputeShader : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion        
     }
 
@@ -869,139 +1003,245 @@ namespace D3D11
     public interface ID3D11DeviceContext : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         void VSSetConstantBuffers(uint StartSlot, uint NumBuffers, ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void PSSetShaderResources(uint StartSlot, uint NumViews, ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void PSSetShader(ID3D11PixelShader pPixelShader, ID3D11ClassInstance ppClassInstances, uint NumClassInstances);
+        [PreserveSig]
         void PSSetSamplers(uint StartSlot, uint NumSamplers, ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void VSSetShader(ID3D11VertexShader pVertexShader, ID3D11ClassInstance ppClassInstances, uint NumClassInstances);
+        [PreserveSig]
         void DrawIndexed(uint IndexCount, uint StartIndexLocation, int BaseVertexLocation);
+        [PreserveSig]
         void Draw(uint VertexCount, uint StartVertexLocation);
         [PreserveSig]
         HRESULT Map(ID3D11Resource pResource, uint Subresource, D3D11_MAP MapType, uint MapFlags, out D3D11_MAPPED_SUBRESOURCE pMappedResource);
+        [PreserveSig]
         void Unmap(ID3D11Resource pResource, uint Subresource);
+        [PreserveSig]
         void PSSetConstantBuffers(uint StartSlot, uint NumBuffers, ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void IASetInputLayout(ID3D11InputLayout pInputLayout);
+        [PreserveSig]
         void IASetVertexBuffers(uint StartSlot, uint NumBuffers, ID3D11Buffer ppVertexBuffers, uint pStrides, uint pOffsets);
+        [PreserveSig]
         void IASetIndexBuffer(ID3D11Buffer pIndexBuffer, DXGI_FORMAT Format, uint Offset);
+        [PreserveSig]
         void DrawIndexedInstanced(uint IndexCountPerInstance, uint InstanceCount, uint StartIndexLocation, int BaseVertexLocation, uint StartInstanceLocation);
+        [PreserveSig]
         void DrawInstanced(uint VertexCountPerInstance, uint InstanceCount, uint StartVertexLocation, uint StartInstanceLocation);
+        [PreserveSig]
         void GSSetConstantBuffers(uint StartSlot, uint NumBuffers, ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void GSSetShader(ID3D11GeometryShader pShader, ID3D11ClassInstance ppClassInstances, uint NumClassInstances);
         //void IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY Topology);
+        [PreserveSig]
         void IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY Topology);
+        [PreserveSig]
         void VSSetShaderResources(uint StartSlot, uint NumViews, ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void VSSetSamplers(uint StartSlot, uint NumSamplers, ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void Begin(ID3D11Asynchronous pAsync);
+        [PreserveSig]
         void End(ID3D11Asynchronous pAsync);
+        [PreserveSig]
         HRESULT GetData(ID3D11Asynchronous pAsync, out IntPtr pData, uint DataSize, uint GetDataFlags);
+        [PreserveSig]
         void SetPredication(ID3D11Predicate pPredicate, bool PredicateValue);
+        [PreserveSig]
         void GSSetShaderResources(uint StartSlot, uint NumViews, ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void GSSetSamplers(uint StartSlot, uint NumSamplers, ID3D11SamplerState ppSamplers);
-
         //void OMSetRenderTargets(uint NumViews, IntPtr ppRenderTargetViews, ID3D11DepthStencilView pDepthStencilView);
+        [PreserveSig]
         void OMSetRenderTargets(uint NumViews, [In, Out, MarshalAs(UnmanagedType.LPArray)] ID3D11RenderTargetView[] ppRenderTargetViews, ID3D11DepthStencilView pDepthStencilView);
-
+        [PreserveSig]
         void OMSetRenderTargetsAndUnorderedAccessViews(uint NumRTVs, ID3D11RenderTargetView ppRenderTargetViews, ID3D11DepthStencilView pDepthStencilView,
             uint UAVStartSlot, uint NumUAVs, ID3D11UnorderedAccessView ppUnorderedAccessViews, uint pUAVInitialCounts);
         //   _In_opt_  const FLOAT BlendFactor[ 4 ],
+        [PreserveSig]
         void OMSetBlendState(ID3D11BlendState pBlendState, [In, Out, MarshalAs(UnmanagedType.LPArray)] float[] BlendFactor, uint SampleMask);
+        [PreserveSig]
         void OMSetDepthStencilState(ID3D11DepthStencilState pDepthStencilState, uint StencilRef);
+        [PreserveSig]
         void SOSetTargets(uint NumBuffers, ID3D11Buffer ppSOTargets, uint pOffsets);
+        [PreserveSig]
         void DrawAuto();
+        [PreserveSig]
         void DrawIndexedInstancedIndirect(ID3D11Buffer pBufferForArgs, uint AlignedByteOffsetForArgs);
+        [PreserveSig]
         void DrawInstancedIndirect(ID3D11Buffer pBufferForArgs, uint AlignedByteOffsetForArgs);
+        [PreserveSig]
         void Dispatch(uint ThreadGroupCountX, uint ThreadGroupCountY, uint ThreadGroupCountZ);
+        [PreserveSig]
         void DispatchIndirect(ID3D11Buffer pBufferForArgs, uint AlignedByteOffsetForArgs);
+        [PreserveSig]
         void RSSetState(ID3D11RasterizerState pRasterizerState);
+        [PreserveSig]
         void RSSetViewports(uint NumViewports, [In, Out, MarshalAs(UnmanagedType.LPArray)] D3D11_VIEWPORT[] pViewports);
         ////void RSSetScissorRects(uint NumRects, D3D11_RECT pRects);
+        [PreserveSig]
         void RSSetScissorRects(uint NumRects, ref RECT pRects);
+        [PreserveSig]
         void CopySubresourceRegion(ID3D11Resource pDstResource, uint DstSubresource, uint DstX, uint DstY, uint DstZ, ID3D11Resource pSrcResource, uint SrcSubresource, D3D11_BOX pSrcBox);
         [PreserveSig]
         void CopyResource(ID3D11Resource pDstResource, ID3D11Resource pSrcResource);
+        [PreserveSig]
         void UpdateSubresource(ID3D11Resource pDstResource, uint DstSubresource, D3D11_BOX pDstBox, IntPtr pSrcData, uint SrcRowPitch, uint SrcDepthPitch);
+        [PreserveSig]
         void CopyStructureCount(ID3D11Buffer pDstBuffer, uint DstAlignedByteOffset, ID3D11UnorderedAccessView pSrcView);
         // float ColorRGBA[ 4 ]
         //void ClearRenderTargetView(ID3D11RenderTargetView pRenderTargetView, [In, Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 4)] float[] ColorRGBA);
+        [PreserveSig]
         void ClearRenderTargetView(ID3D11RenderTargetView pRenderTargetView, [In, Out, MarshalAs(UnmanagedType.LPArray)] float[] ColorRGBA);
         // uint Values[ 4 ]
+        [PreserveSig]
         void ClearUnorderedAccessViewUint(ID3D11UnorderedAccessView pUnorderedAccessView, [In, Out, MarshalAs(UnmanagedType.LPArray)] uint[] Values);
         // float Values[ 4 ]
+        [PreserveSig]
         void ClearUnorderedAccessViewFloat(ID3D11UnorderedAccessView pUnorderedAccessView, [In, Out, MarshalAs(UnmanagedType.LPArray)] float[] Values);
+        [PreserveSig]
         void ClearDepthStencilView(ID3D11DepthStencilView pDepthStencilView, uint ClearFlags, float Depth, byte Stencil);
+        [PreserveSig]
         void GenerateMips(ID3D11ShaderResourceView pShaderResourceView);
+        [PreserveSig]
         void SetResourceMinLOD(ID3D11Resource pResource, float MinLOD);
+        [PreserveSig]
         float GetResourceMinLOD(ID3D11Resource pResource);
+        [PreserveSig]
         void ResolveSubresource(ID3D11Resource pDstResource, uint DstSubresource, ID3D11Resource pSrcResource, uint SrcSubresource, DXGI_FORMAT Format);
+        [PreserveSig]
         void ExecuteCommandList(ID3D11CommandList pCommandList, bool RestoreContextState);
+        [PreserveSig]
         void HSSetShaderResources(uint StartSlot, uint NumViews, ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void HSSetShader(ID3D11HullShader pHullShader, ID3D11ClassInstance ppClassInstances, uint NumClassInstances);
+        [PreserveSig]
         void HSSetSamplers(uint StartSlot, uint NumSamplers, ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void HSSetConstantBuffers(uint StartSlot, uint NumBuffers, ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void DSSetShaderResources(uint StartSlot, uint NumViews, ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void DSSetShader(ID3D11DomainShader pDomainShader, ID3D11ClassInstance ppClassInstances, uint NumClassInstances);
+        [PreserveSig]
         void DSSetSamplers(uint StartSlot, uint NumSamplers, ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void DSSetConstantBuffers(uint StartSlot, uint NumBuffers, ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void CSSetShaderResources(uint StartSlot, uint NumViews, ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void CSSetUnorderedAccessViews(uint StartSlot, uint NumUAVs, ID3D11UnorderedAccessView ppUnorderedAccessViews, uint pUAVInitialCounts);
+        [PreserveSig]
         void CSSetShader(ID3D11ComputeShader pComputeShader, ID3D11ClassInstance ppClassInstances, uint NumClassInstances);
+        [PreserveSig]
         void CSSetSamplers(uint StartSlot, uint NumSamplers, ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void CSSetConstantBuffers(uint StartSlot, uint NumBuffers, ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void VSGetConstantBuffers(uint StartSlot, uint NumBuffers, out ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void PSGetShaderResources(uint StartSlot, uint NumViews, out ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void PSGetShader(out ID3D11PixelShader ppPixelShader, out ID3D11ClassInstance ppClassInstances, ref uint pNumClassInstances);
+        [PreserveSig]
         void PSGetSamplers(uint StartSlot, uint NumSamplers, out ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void VSGetShader(out ID3D11VertexShader ppVertexShader, out ID3D11ClassInstance ppClassInstances, ref uint pNumClassInstances);
+        [PreserveSig]
         void PSGetConstantBuffers(uint StartSlot, uint NumBuffers, out ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void IAGetInputLayout(out ID3D11InputLayout ppInputLayout);
+        [PreserveSig]
         void IAGetVertexBuffers(uint StartSlot, uint NumBuffers, out ID3D11Buffer ppVertexBuffers, out uint pStrides, out uint pOffsets);
+        [PreserveSig]
         void IAGetIndexBuffer(out ID3D11Buffer pIndexBuffer, out DXGI_FORMAT Format, out uint Offset);
+        [PreserveSig]
         void GSGetConstantBuffers(uint StartSlot, uint NumBuffers, out ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void GSGetShader(out ID3D11GeometryShader ppGeometryShader, out ID3D11ClassInstance ppClassInstances, ref uint pNumClassInstances);
         //void IAGetPrimitiveTopology(out D3D11_PRIMITIVE_TOPOLOGY pTopology);
+        [PreserveSig]
         void IAGetPrimitiveTopology(out D3D_PRIMITIVE_TOPOLOGY pTopology);
+        [PreserveSig]
         void VSGetShaderResources(uint StartSlot, uint NumViews, out ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void VSGetSamplers(uint StartSlot, uint NumSamplers, out ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void GetPredication(out ID3D11Predicate ppPredicate, out bool pPredicateValue);
+        [PreserveSig]
         void GSGetShaderResources(uint StartSlot, uint NumViews, out ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void GSGetSamplers(uint StartSlot, uint NumSamplers, out ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void OMGetRenderTargets(uint NumViews, out ID3D11RenderTargetView ppRenderTargetViews, out ID3D11DepthStencilView ppDepthStencilView);
+        [PreserveSig]
         void OMGetRenderTargetsAndUnorderedAccessViews(uint NumRTVs, out ID3D11RenderTargetView ppRenderTargetViews, out ID3D11DepthStencilView ppDepthStencilView, uint UAVStartSlot, uint NumUAVs, out ID3D11UnorderedAccessView ppUnorderedAccessViews);
-        
         //  float BlendFactor[ 4 ]
         //void OMGetBlendState(out ID3D11BlendState ppBlendState, out float[] BlendFactor, out uint pSampleMask);
         //void OMGetBlendState(out ID3D11BlendState ppBlendState, [In, Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 4)] float[] BlendFactor, out uint pSampleMask);
+        [PreserveSig]
         void OMGetBlendState(out ID3D11BlendState ppBlendState, out IntPtr BlendFactor, out uint pSampleMask);
-
+        [PreserveSig]
         void OMGetDepthStencilState(out ID3D11DepthStencilState ppDepthStencilState, out uint pStencilRef);
+        [PreserveSig]
         void SOGetTargets(uint NumBuffers, out ID3D11Buffer ppSOTargets);
+        [PreserveSig]
         void RSGetState(out ID3D11RasterizerState ppRasterizerState);
+        [PreserveSig]
         void RSGetViewports(ref uint pNumViewports, out D3D11_VIEWPORT pViewports);
         //void RSGetScissorRects(ref uint pNumRects, out D3D11_RECT pRects);
+        [PreserveSig]
         void RSGetScissorRects(ref uint pNumRects, out RECT pRects);
+        [PreserveSig]
         void HSGetShaderResources(uint StartSlot, uint NumViews, out ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void HSGetShader(out ID3D11HullShader ppHullShader, out ID3D11ClassInstance ppClassInstances, ref uint pNumClassInstances);
+        [PreserveSig]
         void HSGetSamplers(uint StartSlot, uint NumSamplers, out ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void HSGetConstantBuffers(uint StartSlot, uint NumBuffers, out ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void DSGetShaderResources(uint StartSlot, uint NumViews, out ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void DSGetShader(out ID3D11DomainShader ppDomainShader, out ID3D11ClassInstance ppClassInstances, ref uint pNumClassInstances);
+        [PreserveSig]
         void DSGetSamplers(uint StartSlot, uint NumSamplers, out ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void DSGetConstantBuffers(uint StartSlot, uint NumBuffers, out ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void CSGetShaderResources(uint StartSlot, uint NumViews, out ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void CSGetUnorderedAccessViews(uint StartSlot, uint NumUAVs, out ID3D11UnorderedAccessView ppUnorderedAccessViews);
+        [PreserveSig]
         void CSGetShader(out ID3D11ComputeShader ppComputeShader, out ID3D11ClassInstance ppClassInstances, ref uint pNumClassInstances);
+        [PreserveSig]
         void CSGetSamplers(uint StartSlot, uint NumSamplers, out ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void CSGetConstantBuffers(uint StartSlot, uint NumBuffers, out ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void ClearState();
+        [PreserveSig]
         void Flush();
+        [PreserveSig]
         D3D11_DEVICE_CONTEXT_TYPE GetType();
+        [PreserveSig]
         uint GetContextFlags();
+        [PreserveSig]
         HRESULT FinishCommandList(bool RestoreDeferredContextState, out ID3D11CommandList ppCommandList);
     }
 
@@ -1152,13 +1392,11 @@ namespace D3D11
         [PreserveSig]
         HRESULT CreateGeometryShaderWithStreamOutput(ID3D11Resource pResource, D3D11_UNORDERED_ACCESS_VIEW_DESC pDesc, out ID3D11UnorderedAccessView ppUAView);
         [PreserveSig]
-        HRESULT CreatePixelShader(IntPtr pShaderBytecode, uint BytecodeLength,
-             ID3D11ClassLinkage pClassLinkage, out ID3D11PixelShader ppPixelShader);
+        HRESULT CreatePixelShader(IntPtr pShaderBytecode, uint BytecodeLength, ID3D11ClassLinkage pClassLinkage, out ID3D11PixelShader ppPixelShader);
         [PreserveSig]
         HRESULT CreateHullShader(IntPtr pShaderBytecode, uint BytecodeLength, ID3D11ClassLinkage pClassLinkage, out ID3D11HullShader ppHullShader);
         [PreserveSig]
-        HRESULT CreateDomainShader(IntPtr pShaderBytecode, uint BytecodeLength, ID3D11ClassLinkage pClassLinkage,
-           out ID3D11DomainShader ppDomainShader);
+        HRESULT CreateDomainShader(IntPtr pShaderBytecode, uint BytecodeLength, ID3D11ClassLinkage pClassLinkage,  out ID3D11DomainShader ppDomainShader);
         [PreserveSig]
         HRESULT CreateComputeShader(IntPtr pShaderBytecode, uint BytecodeLength, ID3D11ClassLinkage pClassLinkage, out ID3D11ComputeShader ppComputeShader);
         [PreserveSig]
@@ -1181,21 +1419,34 @@ namespace D3D11
         HRESULT CreateDeferredContext(uint ContextFlags, out ID3D11DeviceContext ppDeferredContext);
         [PreserveSig]
         HRESULT OpenSharedResource(IntPtr hResource, ref Guid ReturnedInterface, out IntPtr ppResource);
+        [PreserveSig]
         HRESULT CheckFormatSupport(DXGI_FORMAT Format, out uint pFormatSupport);
+        [PreserveSig]
         HRESULT CheckMultisampleQualityLevels(DXGI_FORMAT Format, uint SampleCount, out uint pNumQualityLevels);
+        [PreserveSig]
         void CheckCounterInfo(out D3D11_COUNTER_INFO pCounterInfo);
+        [PreserveSig]
         HRESULT CheckCounter(ref D3D11_COUNTER_DESC pDesc, out D3D11_COUNTER_TYPE pType, out uint pActiveCounters,
-                    out string szName, ref uint pNameLength, out string szUnits, ref uint pUnitsLength,
-                           out string szDescription, ref uint pDescriptionLength);
+            out string szName, ref uint pNameLength, out string szUnits, ref uint pUnitsLength, out string szDescription, ref uint pDescriptionLength);
+        [PreserveSig]
         HRESULT CheckFeatureSupport(D3D11_FEATURE Feature, out IntPtr pFeatureSupportData, uint FeatureSupportDataSize);
+        [PreserveSig]
         HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
         D3D_FEATURE_LEVEL GetFeatureLevel();
+        [PreserveSig]
         uint GetCreationFlags();
+        [PreserveSig]
         HRESULT GetDeviceRemovedReason();
+        [PreserveSig]
         void GetImmediateContext(out ID3D11DeviceContext ppImmediateContext);
+        [PreserveSig]
         HRESULT SetExceptionMode(uint RaiseFlags);
+        [PreserveSig]
         uint GetExceptionMode();
     }
 
@@ -1369,15 +1620,21 @@ namespace D3D11
     {
         #region ID3D11Asynchronous
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
-        #endregion
-        
-        new  uint GetDataSize();
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
+        new uint GetDataSize();
+        #endregion
+
+        [PreserveSig]
         void GetDesc(out D3D11_COUNTER_DESC pDesc);
     }
 
@@ -1388,17 +1645,25 @@ namespace D3D11
     {
         #region ID3D11Resource
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);       
         #endregion
 
+        [PreserveSig]
         new void GetType(out D3D11_RESOURCE_DIMENSION pResourceDimension);
+        [PreserveSig]
         new void SetEvictionPriority(uint EvictionPriority);
+        [PreserveSig]
         new uint GetEvictionPriority();
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_TEXTURE1D_DESC pDesc);
     }
 
@@ -1409,17 +1674,25 @@ namespace D3D11
     {
         #region ID3D11Resource
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         new void GetType(out D3D11_RESOURCE_DIMENSION pResourceDimension);
+        [PreserveSig]
         new void SetEvictionPriority(uint EvictionPriority);
+        [PreserveSig]
         new uint GetEvictionPriority();
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_TEXTURE2D_DESC pDesc);
     }
 
@@ -1430,94 +1703,157 @@ namespace D3D11
     {
         #region ID3D11Resource
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         new void GetType(out D3D11_RESOURCE_DIMENSION pResourceDimension);
+        [PreserveSig]
         new void SetEvictionPriority(uint EvictionPriority);
+        [PreserveSig]
         new uint GetEvictionPriority();
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_TEXTURE3D_DESC pDesc);
     }
 
-    [ComImport]
-    [Guid("61F21C45-3C0E-4a74-9CEA-67100D9AD5E4")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface ID3D11VideoContext : ID3D11DeviceChild
+    [ComImport, Guid("61f21c45-3c0e-4a74-9cea-67100d9ad5e4"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public partial interface ID3D11VideoContext : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         HRESULT GetDecoderBuffer(ID3D11VideoDecoder pDecoder, D3D11_VIDEO_DECODER_BUFFER_TYPE Type, out uint pBufferSize, out IntPtr ppBuffer);
+        [PreserveSig]
         HRESULT ReleaseDecoderBuffer(ID3D11VideoDecoder pDecoder, D3D11_VIDEO_DECODER_BUFFER_TYPE Type);
+        [PreserveSig]
         HRESULT DecoderBeginFrame(ID3D11VideoDecoder pDecoder, ID3D11VideoDecoderOutputView pView, uint ContentKeySize, IntPtr pContentKey);
+        [PreserveSig]
         HRESULT DecoderEndFrame(ID3D11VideoDecoder pDecoder);
-        HRESULT SubmitDecoderBuffers(ID3D11VideoDecoder pDecoder, uint NumBuffers, D3D11_VIDEO_DECODER_BUFFER_DESC pBufferDesc);
-        /*APP_DEPRECATED_*/
-        HRESULT DecoderExtension(ID3D11VideoDecoder pDecoder, D3D11_VIDEO_DECODER_EXTENSION pExtensionData);
-        void VideoProcessorSetOutputTargetRect(ID3D11VideoProcessor pVideoProcessor, bool Enable, ref RECT pRect);
-        void VideoProcessorSetOutputBackgroundColor(ID3D11VideoProcessor pVideoProcessor, bool YCbCr, D3D11_VIDEO_COLOR pColor);
-        void VideoProcessorSetOutputColorSpace(ID3D11VideoProcessor pVideoProcessor, D3D11_VIDEO_PROCESSOR_COLOR_SPACE pColorSpace);
+        [PreserveSig]
+        HRESULT SubmitDecoderBuffers(ID3D11VideoDecoder pDecoder, int NumBuffers, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D3D11_VIDEO_DECODER_BUFFER_DESC[] pBufferDesc);
+        [PreserveSig]
+        int DecoderExtension(ID3D11VideoDecoder pDecoder, ref D3D11_VIDEO_DECODER_EXTENSION pExtensionData);
+        [PreserveSig]
+        void VideoProcessorSetOutputTargetRect(ID3D11VideoProcessor pVideoProcessor, bool Enable, IntPtr pRect);
+        [PreserveSig]
+        void VideoProcessorSetOutputBackgroundColor(ID3D11VideoProcessor pVideoProcessor, bool YCbCr, ref D3D11_VIDEO_COLOR pColor);
+        [PreserveSig]
+        void VideoProcessorSetOutputColorSpace(ID3D11VideoProcessor pVideoProcessor, ref D3D11_VIDEO_PROCESSOR_COLOR_SPACE pColorSpace);
+        [PreserveSig]
         void VideoProcessorSetOutputAlphaFillMode(ID3D11VideoProcessor pVideoProcessor, D3D11_VIDEO_PROCESSOR_ALPHA_FILL_MODE AlphaFillMode, uint StreamIndex);
+        [PreserveSig]
         void VideoProcessorSetOutputConstriction(ID3D11VideoProcessor pVideoProcessor, bool Enable, SIZE Size);
+        [PreserveSig]
         void VideoProcessorSetOutputStereoMode(ID3D11VideoProcessor pVideoProcessor, bool Enable);
-        /*APP_DEPRECATED_*/
-        HRESULT VideoProcessorSetOutputExtension(ID3D11VideoProcessor pVideoProcessor, ref Guid pExtensionGuid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        int VideoProcessorSetOutputExtension(ID3D11VideoProcessor pVideoProcessor, [MarshalAs(UnmanagedType.LPStruct)] Guid pExtensionGuid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         void VideoProcessorGetOutputTargetRect(ID3D11VideoProcessor pVideoProcessor, out bool Enabled, out RECT pRect);
+        [PreserveSig]
         void VideoProcessorGetOutputBackgroundColor(ID3D11VideoProcessor pVideoProcessor, out bool pYCbCr, out D3D11_VIDEO_COLOR pColor);
+        [PreserveSig]
         void VideoProcessorGetOutputColorSpace(ID3D11VideoProcessor pVideoProcessor, out D3D11_VIDEO_PROCESSOR_COLOR_SPACE pColorSpace);
+        [PreserveSig]
         void VideoProcessorGetOutputAlphaFillMode(ID3D11VideoProcessor pVideoProcessor, out D3D11_VIDEO_PROCESSOR_ALPHA_FILL_MODE pAlphaFillMode, out uint pStreamIndex);
+        [PreserveSig]
         void VideoProcessorGetOutputConstriction(ID3D11VideoProcessor pVideoProcessor, out bool pEnabled, out SIZE pSize);
+        [PreserveSig]
         void VideoProcessorGetOutputStereoMode(ID3D11VideoProcessor pVideoProcessor, out bool pEnabled);
-        /*APP_DEPRECATED_*/
-        HRESULT VideoProcessorGetOutputExtension(ID3D11VideoProcessor pVideoProcessor, ref Guid pExtensionGuid, uint DataSize, out IntPtr pData);
+        [PreserveSig]
+        int VideoProcessorGetOutputExtension(ID3D11VideoProcessor pVideoProcessor, [MarshalAs(UnmanagedType.LPStruct)] Guid pExtensionGuid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         void VideoProcessorSetStreamFrameFormat(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, D3D11_VIDEO_FRAME_FORMAT FrameFormat);
-        void VideoProcessorSetStreamColorSpace(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, D3D11_VIDEO_PROCESSOR_COLOR_SPACE pColorSpace);
-        void VideoProcessorSetStreamOutputRate(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, D3D11_VIDEO_PROCESSOR_OUTPUT_RATE OutputRate, bool RepeatFrame, DXGI_RATIONAL pCustomRate);
-        void VideoProcessorSetStreamSourceRect(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, bool Enable, ref RECT pRect);
+        [PreserveSig]
+        void VideoProcessorSetStreamColorSpace(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, ref D3D11_VIDEO_PROCESSOR_COLOR_SPACE pColorSpace);
+        [PreserveSig]
+        void VideoProcessorSetStreamOutputRate(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, D3D11_VIDEO_PROCESSOR_OUTPUT_RATE OutputRate, bool RepeatFrame, IntPtr pCustomRate);
+        [PreserveSig]
+        void VideoProcessorSetStreamSourceRect(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, bool Enable, IntPtr pRect);
+        [PreserveSig]
         void VideoProcessorSetStreamDestRect(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, bool Enable, ref RECT pRect);
+        [PreserveSig]
         void VideoProcessorSetStreamAlpha(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, bool Enable, float Alpha);
-        void VideoProcessorSetStreamPalette(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, uint Count, uint pEntries);
-        void VideoProcessorSetStreamPixelAspectRatio(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, bool Enable, DXGI_RATIONAL pSourceAspectRatio, DXGI_RATIONAL pDestinationAspectRatio);
+        [PreserveSig]
+        void VideoProcessorSetStreamPalette(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, int Count, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] uint[] pEntries);
+        [PreserveSig]
+        void VideoProcessorSetStreamPixelAspectRatio(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, bool Enable, IntPtr pSourceAspectRatio, IntPtr pDestinationAspectRatio);
+        [PreserveSig]
         void VideoProcessorSetStreamLumaKey(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, bool Enable, float Lower, float Upper);
+        [PreserveSig]
         void VideoProcessorSetStreamStereoFormat(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, bool Enable, D3D11_VIDEO_PROCESSOR_STEREO_FORMAT Format, bool LeftViewFrame0, bool BaseViewFrame0, D3D11_VIDEO_PROCESSOR_STEREO_FLIP_MODE FlipMode, int MonoOffset);
+        [PreserveSig]
         void VideoProcessorSetStreamAutoProcessingMode(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, bool Enable);
+        [PreserveSig]
         void VideoProcessorSetStreamFilter(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, D3D11_VIDEO_PROCESSOR_FILTER Filter, bool Enable, int Level);
-        /*APP_DEPRECATED_*/
-        HRESULT VideoProcessorSetStreamExtension(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, ref Guid pExtensionGuid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        int VideoProcessorSetStreamExtension(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, [MarshalAs(UnmanagedType.LPStruct)] Guid pExtensionGuid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         void VideoProcessorGetStreamFrameFormat(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, out D3D11_VIDEO_FRAME_FORMAT pFrameFormat);
+        [PreserveSig]
         void VideoProcessorGetStreamColorSpace(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, out D3D11_VIDEO_PROCESSOR_COLOR_SPACE pColorSpace);
+        [PreserveSig]
         void VideoProcessorGetStreamOutputRate(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, out D3D11_VIDEO_PROCESSOR_OUTPUT_RATE pOutputRate, out bool pRepeatFrame, out DXGI_RATIONAL pCustomRate);
+        [PreserveSig]
         void VideoProcessorGetStreamSourceRect(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, out bool pEnabled, out RECT pRect);
+        [PreserveSig]
         void VideoProcessorGetStreamDestRect(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, out bool pEnabled, out RECT pRect);
+        [PreserveSig]
         void VideoProcessorGetStreamAlpha(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, out bool pEnabled, out float pAlpha);
-        void VideoProcessorGetStreamPalette(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, uint Count, out uint pEntries);
+        [PreserveSig]
+        void VideoProcessorGetStreamPalette(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, int Count, [Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] uint[] pEntries);
+        [PreserveSig]
         void VideoProcessorGetStreamPixelAspectRatio(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, out bool pEnabled, out DXGI_RATIONAL pSourceAspectRatio, out DXGI_RATIONAL pDestinationAspectRatio);
+        [PreserveSig]
         void VideoProcessorGetStreamLumaKey(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, out bool pEnabled, out float pLower, out float pUpper);
+        [PreserveSig]
         void VideoProcessorGetStreamStereoFormat(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, out bool pEnable, out D3D11_VIDEO_PROCESSOR_STEREO_FORMAT pFormat, out bool pLeftViewFrame0, out bool pBaseViewFrame0, out D3D11_VIDEO_PROCESSOR_STEREO_FLIP_MODE pFlipMode, out int MonoOffset);
+        [PreserveSig]
         void VideoProcessorGetStreamAutoProcessingMode(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, out bool pEnabled);
+        [PreserveSig]
         void VideoProcessorGetStreamFilter(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, D3D11_VIDEO_PROCESSOR_FILTER Filter, out bool pEnabled, out int pLevel);
-        /*APP_DEPRECATED_*/
-        HRESULT VideoProcessorGetStreamExtension(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, ref Guid pExtensionGuid, uint DataSize, out IntPtr pData);
-        HRESULT VideoProcessorBlt(ID3D11VideoProcessor pVideoProcessor, ID3D11VideoProcessorOutputView pView, uint OutputFrame, uint StreamCount, D3D11_VIDEO_PROCESSOR_STREAM pStreams);
-        HRESULT NegotiateCryptoSessionKeyExchange(ID3D11CryptoSession pCryptoSession, uint DataSize, ref IntPtr pData);
-        void EncryptionBlt(ID3D11CryptoSession pCryptoSession, ID3D11Texture2D pSrcSurface, ID3D11Texture2D pDstSurface, uint IVSize, ref IntPtr pIV);
-        void DecryptionBlt(ID3D11CryptoSession pCryptoSession, ID3D11Texture2D pSrcSurface, ID3D11Texture2D pDstSurface, D3D11_ENCRYPTED_BLOCK_INFO pEncryptedBlockInfo, uint ContentKeySize, IntPtr pContentKey, uint IVSize, ref IntPtr pIV);
-        void StartSessionKeyRefresh(ID3D11CryptoSession pCryptoSession, uint RandomNumberSize, out IntPtr pRandomNumber);
+        [PreserveSig]
+        int VideoProcessorGetStreamExtension(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, [MarshalAs(UnmanagedType.LPStruct)] Guid pExtensionGuid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        HRESULT VideoProcessorBlt(ID3D11VideoProcessor pVideoProcessor, ID3D11VideoProcessorOutputView pView, uint OutputFrame, int StreamCount, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] D3D11_VIDEO_PROCESSOR_STREAM[] pStreams);
+        [PreserveSig]
+        HRESULT NegotiateCryptoSessionKeyExchange(ID3D11CryptoSession pCryptoSession, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        void EncryptionBlt(ID3D11CryptoSession pCryptoSession, ID3D11Texture2D pSrcSurface, ID3D11Texture2D pDstSurface, uint IVSize, IntPtr pIV);
+        [PreserveSig]
+        void DecryptionBlt(ID3D11CryptoSession pCryptoSession, ID3D11Texture2D pSrcSurface, ID3D11Texture2D pDstSurface,  IntPtr pEncryptedBlockInfo, uint ContentKeySize, IntPtr pContentKey, uint IVSize, IntPtr pIV);
+        [PreserveSig]
+        void StartSessionKeyRefresh(ID3D11CryptoSession pCryptoSession, uint RandomNumberSize, IntPtr pRandomNumber);
+        [PreserveSig]
         void FinishSessionKeyRefresh(ID3D11CryptoSession pCryptoSession);
-        HRESULT GetEncryptionBltKey(ID3D11CryptoSession pCryptoSession, uint KeySize, out IntPtr pReadbackKey);
-        HRESULT NegotiateAuthenticatedChannelKeyExchange(ID3D11AuthenticatedChannel pChannel, uint DataSize, ref IntPtr pData);
-        HRESULT QueryAuthenticatedChannel(ID3D11AuthenticatedChannel pChannel, uint InputSize, IntPtr pInput, uint OutputSize, out IntPtr pOutput);
+        [PreserveSig]
+        HRESULT GetEncryptionBltKey(ID3D11CryptoSession pCryptoSession, uint KeySize, IntPtr pReadbackKey);
+        [PreserveSig]
+        HRESULT NegotiateAuthenticatedChannelKeyExchange(ID3D11AuthenticatedChannel pChannel, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        HRESULT QueryAuthenticatedChannel(ID3D11AuthenticatedChannel pChannel, uint InputSize, IntPtr pInput, uint OutputSize, IntPtr pOutput);
+        [PreserveSig]
         HRESULT ConfigureAuthenticatedChannel(ID3D11AuthenticatedChannel pChannel, uint InputSize, IntPtr pInput, out D3D11_AUTHENTICATED_CONFIGURE_OUTPUT pOutput);
+        [PreserveSig]
         void VideoProcessorSetStreamRotation(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, bool Enable, D3D11_VIDEO_PROCESSOR_ROTATION Rotation);
+        [PreserveSig]
         void VideoProcessorGetStreamRotation(ID3D11VideoProcessor pVideoProcessor, uint StreamIndex, out bool pEnable, out D3D11_VIDEO_PROCESSOR_ROTATION pRotation);
     }
 
@@ -1527,13 +1863,19 @@ namespace D3D11
     public interface ID3D11VideoDecoder : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);      
         #endregion
 
+        [PreserveSig]
         HRESULT GetCreationParameters(out D3D11_VIDEO_DECODER_DESC pVideoDesc, out D3D11_VIDEO_DECODER_CONFIG pConfig);
+        [PreserveSig]
         HRESULT GetDriverHandle(out IntPtr pDriverHandle);
     }
 
@@ -1615,15 +1957,21 @@ namespace D3D11
     {
         #region ID3D11View
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         new void GetResource(out ID3D11Resource ppResource);
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_VIDEO_DECODER_OUTPUT_VIEW_DESC pDesc);
     }
 
@@ -1662,13 +2010,19 @@ namespace D3D11
     public interface ID3D11VideoProcessor : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         void GetContentDesc(out D3D11_VIDEO_PROCESSOR_CONTENT_DESC pDesc);
+        [PreserveSig]
         void GetRateConversionCaps(out D3D11_VIDEO_PROCESSOR_RATE_CONVERSION_CAPS pCaps);
     }
 
@@ -1718,32 +2072,271 @@ namespace D3D11
         public uint CustomRateCount;
     }
 
-    [StructLayout(LayoutKind.Sequential)]
-    public struct D3D11_VIDEO_PROCESSOR_COLOR_SPACE
+    // https://github.com/dahall/Vanara/blob/master/Core/Extensions/BitHelper.cs
+
+    public static class BitHelper
     {
-        //public uint Usage  : 1;
-        //public uint RGB_Range  : 1;
-        //public uint YCbCr_Matrix   : 1;
-        //public uint YCbCr_xvYCC    : 1;
-        //public uint Nominal_Range  : 2;
-        //public uint Reserved	: 26;
-        public uint Usage;
-        public uint RGB_Range;
-        public uint YCbCr_Matrix;
-        public uint YCbCr_xvYCC;
-        public uint Nominal_Range;
-        public uint Reserved;
+        /// <summary>Gets the bit value at the specified index in a bit vector.</summary>
+        /// <typeparam name="T">The type of the bit vector. Must be of type <see cref="IConvertible"/>.</typeparam>
+        /// <param name="bits">The bit vector.</param>
+        /// <param name="idx">The zero-based index of the bit to get.</param>
+        /// <returns><see langword="true"/> if the bit is set (1); <see langword="false"/> otherwise.</returns>
+        public static bool GetBit<T>(T bits, byte idx) where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>, IFormattable =>
+            (idx < (Marshal.SizeOf(typeof(T)) * 8)) ? (bits.ToInt64(null) & 1 << idx) != 0 : throw new ArgumentOutOfRangeException(nameof(idx));
+
+        /// <summary>Gets the bit array value from the specified range in a bit vector.</summary>
+        /// <typeparam name="T">The type of the bit vector. Must be of type <see cref="IConvertible"/>.</typeparam>
+        /// <param name="bits">The bit vector.</param>
+        /// <param name="startIdx">The zero-based start index of the bit range to get.</param>
+        /// <param name="count">The number of sequential bits to fetch starting at <paramref name="startIdx"/>.</param>
+        /// <returns>The value of the requested bit range.</returns>
+        public static T GetBits<T>(T bits, byte startIdx, byte count) where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>, IFormattable
+        {
+            if (startIdx >= (Marshal.SizeOf(typeof(T)) * 8)) throw new ArgumentOutOfRangeException(nameof(startIdx));
+            if (count + startIdx > (Marshal.SizeOf(typeof(T)) * 8)) throw new ArgumentOutOfRangeException(nameof(count));
+            return (T)Convert.ChangeType((bits.ToInt64(null) >> startIdx) & ((1 << count) - 1), typeof(T));
+        }
+
+        /// <summary>Sets the bit value at the specified index in a bit vector.</summary>
+        /// <typeparam name="T">The type of the bit vector. Must be of type <see cref="IConvertible"/>.</typeparam>
+        /// <param name="bits">The bit vector.</param>
+        /// <param name="idx">The index of the bit to set.</param>
+        /// <param name="value">If set to <see langword="true"/>, set the bit (= 1); otherwise, clear the bit (= 0).</param>
+        public static void SetBit<T>(ref T bits, byte idx, bool value) where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>, IFormattable
+        {
+            if (idx >= (Marshal.SizeOf(typeof(T)) * 8)) throw new ArgumentOutOfRangeException(nameof(idx));
+            long bit = 1 << idx;
+            var l = bits.ToInt64(null);
+            bits = (T)Convert.ChangeType(value ? l | bit : l & ~bit, typeof(T));
+        }
+
+        /// <summary>Sets the bit values at the specified range in a bit vector.</summary>
+        /// <typeparam name="T">The type of the bit vector. Must be of type <see cref="IConvertible"/>.</typeparam>
+        /// <typeparam name="TValue">The type of the value. Must be of type <see cref="IConvertible"/>.</typeparam>
+        /// <param name="bits">The bit vector.</param>
+        /// <param name="startIdx">The zero-based start index of the bit range to set.</param>
+        /// <param name="count">The number of sequential bits to set starting at <paramref name="startIdx"/>.</param>
+        /// <param name="value">The value to set within the specified range of <paramref name="bits"/>.</param>
+        public static void SetBits<T, TValue>(ref T bits, byte startIdx, byte count, TValue value) where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>, IFormattable where TValue : struct, IComparable, IComparable<TValue>, IConvertible, IEquatable<TValue>, IFormattable
+        {
+            if (startIdx >= (Marshal.SizeOf(typeof(T)) * 8)) throw new ArgumentOutOfRangeException(nameof(startIdx));
+            if (count + startIdx > (Marshal.SizeOf(typeof(T)) * 8)) throw new ArgumentOutOfRangeException(nameof(count));
+            var val = value.ToInt64(null);
+            if (val >= (1 << count)) throw new ArgumentOutOfRangeException(nameof(value));
+            bits = (T)Convert.ChangeType(bits.ToInt64(null) & ~(((1 << count) - 1) << startIdx) | (val << startIdx), typeof(T));
+        }
+    }
+
+    public static class InteropRuntime
+    {
+        public static void SetByteArray(byte[] value, byte[] bytes, int offset, int count)
+        {
+            if (value == null || value.Length == 0)
+                return;
+
+            if (bytes == null)
+                throw new ArgumentNullException(nameof(bytes));
+
+            var countMod = count % 8;
+            var offsetMod = offset % 8;
+            if (countMod == 0 && offsetMod == 0)
+            {
+                Buffer.BlockCopy(value, 0, bytes, offset / 8, count / 8);
+                return;
+            }
+
+            var bitIndex = offsetMod;
+            var byteIndex = offset / 8;
+            foreach (var bit in EnumerateBits(value, 0, value.Length * 8))
+            {
+                if (bit)
+                {
+                    bytes[byteIndex] |= (byte)(1 << bitIndex);
+                }
+                bitIndex++;
+                if (bitIndex == 8)
+                {
+                    bitIndex = 0;
+                    byteIndex++;
+                }
+            }
+        }
+        public static IEnumerable<bool> EnumerateBits(byte[] bytes, int offset, int count)
+        {
+            if (bytes == null)
+                yield break;
+
+            // The ordering of data declared as bit fields is from low to high bit
+            // https://docs.microsoft.com/en-us/cpp/cpp/cpp-bit-fields
+            var byteIndex = offset / 8;
+            var bitIndex = offset % 8;
+            var b = bytes[byteIndex];
+            for (var i = 0; i < count; i++)
+            {
+                yield return (b & (1 << bitIndex)) != 0;
+                if (i == count - 1)
+                    break;
+
+                bitIndex++;
+                if (bitIndex > 7)
+                {
+                    bitIndex = 0;
+                    byteIndex++;
+                    b = bytes[byteIndex];
+                }
+            }
+        }
+        public static uint GetUInt32(byte[] bytes, int offset, int count)
+        {
+            if (bytes == null)
+                return 0;
+
+            if (count == 32)
+                return BitConverter.ToUInt32(bytes, offset / 8);
+
+            uint ui = 0;
+            var bitIndex = 0;
+            foreach (var bit in EnumerateBits(bytes, offset, count))
+            {
+                if (bit)
+                {
+                    ui |= 1U << bitIndex;
+                }
+                bitIndex++;
+            }
+            return ui;
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void SetUInt32(uint value, byte[] bytes, int offset, int count) => SetByteArray(BitConverter.GetBytes(value), bytes, offset, count);
     }
 
     [StructLayout(LayoutKind.Sequential)]
+    public struct D3D11_VIDEO_PROCESSOR_COLOR_SPACE
+    {
+        private uint bits;
+        public bool Usage { get => BitHelper.GetBit(bits, 0); set => BitHelper.SetBit(ref bits, 0, value); }
+        public bool RGB_Range { get => BitHelper.GetBit(bits, 1); set => BitHelper.SetBit(ref bits, 1, value); }
+        public bool YCbCr_Matrix { get => BitHelper.GetBit(bits, 2); set => BitHelper.SetBit(ref bits, 2, value); }
+        public bool YCbCr_xvYCC { get => BitHelper.GetBit(bits, 3); set => BitHelper.SetBit(ref bits, 3, value); }
+        public byte Nominal_Range { get => (byte)BitHelper.GetBits(bits, 4, 2); set => BitHelper.SetBits(ref bits, 4, 2, value); }
+    }
+
+    //[StructLayout(LayoutKind.Sequential)]
+    //public struct D3D11_VIDEO_PROCESSOR_COLOR_SPACE
+    //{
+    //    //public uint Usage  : 1;
+    //    //public uint RGB_Range  : 1;
+    //    //public uint YCbCr_Matrix   : 1;
+    //    //public uint YCbCr_xvYCC    : 1;
+    //    //public uint Nominal_Range  : 2;
+    //    //public uint Reserved	: 26;
+
+    //        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+    //        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    //        public byte[] __bits;
+    //        public uint Usage { [MethodImpl(MethodImplOptions.AggressiveInlining)] get => InteropRuntime.GetUInt32(__bits, 0, 1); [MethodImpl(MethodImplOptions.AggressiveInlining)] set { if (__bits == null) __bits = new byte[4]; InteropRuntime.SetUInt32(value, __bits, 0, 1); } }
+    //        public uint RGB_Range { [MethodImpl(MethodImplOptions.AggressiveInlining)] get => InteropRuntime.GetUInt32(__bits, 1, 1); [MethodImpl(MethodImplOptions.AggressiveInlining)] set { if (__bits == null) __bits = new byte[4]; InteropRuntime.SetUInt32(value, __bits, 1, 1); } }
+    //        public uint YCbCr_Matrix { [MethodImpl(MethodImplOptions.AggressiveInlining)] get => InteropRuntime.GetUInt32(__bits, 2, 1); [MethodImpl(MethodImplOptions.AggressiveInlining)] set { if (__bits == null) __bits = new byte[4]; InteropRuntime.SetUInt32(value, __bits, 2, 1); } }
+    //        public uint YCbCr_xvYCC { [MethodImpl(MethodImplOptions.AggressiveInlining)] get => InteropRuntime.GetUInt32(__bits, 3, 1); [MethodImpl(MethodImplOptions.AggressiveInlining)] set { if (__bits == null) __bits = new byte[4]; InteropRuntime.SetUInt32(value, __bits, 3, 1); } }
+    //        public uint Nominal_Range { [MethodImpl(MethodImplOptions.AggressiveInlining)] get => InteropRuntime.GetUInt32(__bits, 4, 2); [MethodImpl(MethodImplOptions.AggressiveInlining)] set { if (__bits == null) __bits = new byte[4]; InteropRuntime.SetUInt32(value, __bits, 4, 2); } }
+    //        public uint Reserved { [MethodImpl(MethodImplOptions.AggressiveInlining)] get => InteropRuntime.GetUInt32(__bits, 6, 26); [MethodImpl(MethodImplOptions.AggressiveInlining)] set { if (__bits == null) __bits = new byte[4]; InteropRuntime.SetUInt32(value, __bits, 6, 26); } }
+
+
+    //    //private uint _value;
+
+    //    //// Bit field properties
+    //    //public uint Usage
+    //    //{
+    //    //    get => (_value >> 0) & 0x1;
+    //    //    set => _value = (_value & ~(0x1u << 0)) | ((value & 0x1) << 0);
+    //    //}
+
+    //    //public uint RGB_Range
+    //    //{
+    //    //    get => (_value >> 1) & 0x1;
+    //    //    set => _value = (_value & ~(0x1u << 1)) | ((value & 0x1) << 1);
+    //    //}
+
+    //    //public uint YCbCr_Matrix
+    //    //{
+    //    //    get => (_value >> 2) & 0x1;
+    //    //    set => _value = (_value & ~(0x1u << 2)) | ((value & 0x1) << 2);
+    //    //}
+
+    //    //public uint YCbCr_xvYCC
+    //    //{
+    //    //    get => (_value >> 3) & 0x1;
+    //    //    set => _value = (_value & ~(0x1u << 3)) | ((value & 0x1) << 3);
+    //    //}
+
+    //    //public uint Nominal_Range
+    //    //{
+    //    //    get => (_value >> 4) & 0x3; // 2-bit field
+    //    //    set => _value = (_value & ~(0x3u << 4)) | ((value & 0x3) << 4);
+    //    //}
+
+    //    //public uint Reserved
+    //    //{
+    //    //    get => (_value >> 6) & 0x3FFFFFF; // 26-bit reserved
+    //    //    set => _value = (_value & ~(0x3FFFFFFu << 6)) | ((value & 0x3FFFFFF) << 6);
+    //    //}
+
+    //    //public uint RawValue
+    //    //{
+    //    //    get => _value;
+    //    //    set => _value = value;
+    //    //}
+
+    //}
+
+    //[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    //public struct D3D11_VIDEO_COLOR
+    //{
+    //    // C:/Program Files (x86)/Windows Kits/10/Include/10.0.18362.0/um/d3d11.h:10370
+    //    [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Unicode)]
+    //    public struct __Anonymous__0
+    //    {
+
+    //        [FieldOffset(0)] public D3D11_VIDEO_COLOR_YCbCrA YCbCr;
+
+    //        [FieldOffset(0)] public D3D11_VIDEO_COLOR_RGBA RGBA;
+    //    }
+    //    public __Anonymous__0 __field__0;
+    //}
+
+    [StructLayout(LayoutKind.Explicit)]
     public struct D3D11_VIDEO_COLOR
     {
+        /// <summary>A D3D11_VIDEO_COLOR_YCbCrA structure that contains a YCbCr color value.</summary>
+        [FieldOffset(0)]
+        public D3D11_VIDEO_COLOR_YCbCrA YCbCr;
+
+        /// <summary>A D3D11_VIDEO_COLOR_RGBA structure that contains an RGB color value.</summary>
+        [FieldOffset(0)]
         public D3D11_VIDEO_COLOR_RGBA RGBA;
-        //    union 
-        //    {
-        //    D3D11_VIDEO_COLOR_YCbCrA YCbCr;
-        //    D3D11_VIDEO_COLOR_RGBA RGBA;
-        //};
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+    public struct D3D11_VIDEO_COLOR_YCbCrA
+    {
+        /// <summary>The Y luma value.</summary>
+        public float Y;
+
+        /// <summary>The Cb chroma value.</summary>
+        public float Cb;
+
+        /// <summary>The Cr chroma value.</summary>
+        public float Cr;
+
+        /// <summary>The alpha value. Values range from 0 (transparent) to 1 (opaque).</summary>
+        public float A;
+    }
+
+    public enum D3D11_VIDEO_PROCESSOR_NOMINAL_RANGE
+    {
+        D3D11_VIDEO_PROCESSOR_NOMINAL_RANGE_UNDEFINED = 0,
+        D3D11_VIDEO_PROCESSOR_NOMINAL_RANGE_16_235 = 1,
+        D3D11_VIDEO_PROCESSOR_NOMINAL_RANGE_0_255 = 2
     }
 
     public enum D3D11_VIDEO_PROCESSOR_OUTPUT_RATE
@@ -1784,18 +2377,6 @@ namespace D3D11
         D3D11_VIDEO_PROCESSOR_FILTER_STEREO_ADJUSTMENT = 7
     }
 
-    public enum D3D11_VIDEO_PROCESSOR_FILTER_CAPS
-    {
-        D3D11_VIDEO_PROCESSOR_FILTER_CAPS_BRIGHTNESS = 0x1,
-        D3D11_VIDEO_PROCESSOR_FILTER_CAPS_CONTRAST = 0x2,
-        D3D11_VIDEO_PROCESSOR_FILTER_CAPS_HUE = 0x4,
-        D3D11_VIDEO_PROCESSOR_FILTER_CAPS_SATURATION = 0x8,
-        D3D11_VIDEO_PROCESSOR_FILTER_CAPS_NOISE_REDUCTION = 0x10,
-        D3D11_VIDEO_PROCESSOR_FILTER_CAPS_EDGE_ENHANCEMENT = 0x20,
-        D3D11_VIDEO_PROCESSOR_FILTER_CAPS_ANAMORPHIC_SCALING = 0x40,
-        D3D11_VIDEO_PROCESSOR_FILTER_CAPS_STEREO_ADJUSTMENT = 0x80
-    }
-
     [ComImport]
     [Guid("A048285E-25A9-4527-BD93-D68B68C44254")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -1803,29 +2384,35 @@ namespace D3D11
     {
         #region ID3D11View
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         new void GetResource(out ID3D11Resource ppResource);
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_VIDEO_PROCESSOR_OUTPUT_VIEW_DESC pDesc);
     }
 
-    [StructLayout(LayoutKind.Sequential)]
-    public struct D3D11_VIDEO_PROCESSOR_OUTPUT_VIEW_DESC
-    {
-        public D3D11_VPOV_DIMENSION ViewDimension;
-        public D3D11_TEX2D_VPOV Texture2D;
-        //    union 
-        //    {
-        //    D3D11_TEX2D_VPOV Texture2D;
-        //    D3D11_TEX2D_ARRAY_VPOV Texture2DArray;
-        //};
-    }
+    //[StructLayout(LayoutKind.Sequential)]
+    //public struct D3D11_VIDEO_PROCESSOR_OUTPUT_VIEW_DESC
+    //{
+    //    public D3D11_VPOV_DIMENSION ViewDimension;
+    //    public D3D11_TEX2D_VPOV Texture2D;
+    //    //    union 
+    //    //    {
+    //    //    D3D11_TEX2D_VPOV Texture2D;
+    //    //    D3D11_TEX2D_ARRAY_VPOV Texture2DArray;
+    //    //};
+    //}
 
     public enum D3D11_VPOV_DIMENSION
     {
@@ -1855,12 +2442,12 @@ namespace D3D11
         public uint InputFrameOrField;
         public uint PastFrames;
         public uint FutureFrames;
-        public IntPtr /*ID3D11VideoProcessorInputView***/ ppPastSurfaces;
+        public IntPtr /*ID3D11VideoProcessorInputView*/ ppPastSurfaces;
         public ID3D11VideoProcessorInputView pInputSurface;
-        public IntPtr /*ID3D11VideoProcessorInputView***/ ppFutureSurfaces;
-        public IntPtr /*ID3D11VideoProcessorInputView***/ ppPastSurfacesRight;
-        public ID3D11VideoProcessorInputView pInputSurfaceRight;
-        public IntPtr /*ID3D11VideoProcessorInputView***/ ppFutureSurfacesRight;
+        public IntPtr /*ID3D11VideoProcessorInputView*/ ppFutureSurfaces;
+        public IntPtr /*ID3D11VideoProcessorInputView*/ ppPastSurfacesRight;
+        public IntPtr /*ID3D11VideoProcessorInputView*/ pInputSurfaceRight;
+        public IntPtr /*ID3D11VideoProcessorInputView*/ ppFutureSurfacesRight;
     }
 
     [ComImport]
@@ -1870,27 +2457,76 @@ namespace D3D11
     {
         #region ID3D11View
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         new void GetResource(out ID3D11Resource ppResource);
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_VIDEO_PROCESSOR_INPUT_VIEW_DESC pDesc);
     }
 
-    [StructLayout(LayoutKind.Sequential)]
+    //[StructLayout(LayoutKind.Sequential)]
+    //public struct D3D11_VIDEO_PROCESSOR_INPUT_VIEW_DESC
+    //{
+    //    public uint  FourCC;
+    //    public D3D11_VPIV_DIMENSION ViewDimension;
+    ////    union 
+    ////    {
+    ////    D3D11_TEX2D_VPIV Texture2D;
+    ////};
+    //}
+
+    [StructLayout(LayoutKind.Explicit)]
+    public struct D3D11_VIDEO_PROCESSOR_OUTPUT_VIEW_DESC
+    {
+        [FieldOffset(0)]
+        public D3D11_VPOV_DIMENSION ViewDimension;
+
+        // Union starts at offset 4
+        [FieldOffset(4)]
+        public D3D11_TEX2D_VPOV Texture2D;
+
+        [FieldOffset(4)]
+        public D3D11_TEX2D_ARRAY_VPOV Texture2DArray;
+    }
+
+    [StructLayout(LayoutKind.Explicit)]
     public struct D3D11_VIDEO_PROCESSOR_INPUT_VIEW_DESC
     {
-        public uint  FourCC;
+        [FieldOffset(0)]
+        public uint FourCC;  // Matches `UINT FourCC`
+
+        [FieldOffset(4)]
         public D3D11_VPIV_DIMENSION ViewDimension;
-    //    union 
-    //    {
-    //    D3D11_TEX2D_VPIV Texture2D;
-    //};
+
+        [FieldOffset(8)]  // Union starts after FourCC and ViewDimension
+        public D3D11_TEX2D_VPIV Texture2D;
+    } 
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct D3D11_TEX2D_VPIV
+    {
+        public uint MipSlice;
+        public uint ArraySlice;
+    }
+
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct D3D11_TEX2D_ARRAY_VPOV
+    {
+        public uint MipSlice;
+        public uint FirstArraySlice;
+        public uint ArraySize;
     }
 
     public enum D3D11_VPIV_DIMENSION
@@ -1905,16 +2541,25 @@ namespace D3D11
     public interface ID3D11CryptoSession : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         void GetCryptoType(out Guid pCryptoType);
+        [PreserveSig]
         void GetDecoderProfile(out Guid pDecoderProfile);
+        [PreserveSig]
         HRESULT GetCertificateSize(out uint pCertificateSize);
+        [PreserveSig]
         HRESULT GetCertificate(uint CertificateSize, out IntPtr pCertificate);
+        [PreserveSig]
         void GetCryptoSessionHandle(out IntPtr pCryptoSessionHandle);
     }
 
@@ -1924,18 +2569,23 @@ namespace D3D11
     public interface ID3D11AuthenticatedChannel : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         HRESULT GetCertificateSize(out uint pCertificateSize);
+        [PreserveSig]
         HRESULT GetCertificate(uint CertificateSize, out IntPtr pCertificate);
+        [PreserveSig]
         void GetChannelHandle(out IntPtr pChannelHandle);
     }
-
-
 
     [StructLayout(LayoutKind.Sequential)]
     public struct D3D11_AUTHENTICATED_CONFIGURE_OUTPUT
@@ -1967,25 +2617,39 @@ namespace D3D11
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface ID3D11VideoDevice
     {
+        [PreserveSig]
         HRESULT CreateVideoDecoder(D3D11_VIDEO_DECODER_DESC pVideoDesc, D3D11_VIDEO_DECODER_CONFIG pConfig, out ID3D11VideoDecoder ppDecoder);
         [PreserveSig]
         HRESULT CreateVideoProcessor(ID3D11VideoProcessorEnumerator pEnum, uint RateConversionIndex, out ID3D11VideoProcessor ppVideoProcessor);
+        [PreserveSig]
         HRESULT CreateAuthenticatedChannel(D3D11_AUTHENTICATED_CHANNEL_TYPE ChannelType, out ID3D11AuthenticatedChannel ppAuthenticatedChannel);
+        [PreserveSig]
         HRESULT CreateCryptoSession(ref Guid pCryptoType, ref Guid pDecoderProfile, ref Guid pKeyExchangeType, out ID3D11CryptoSession ppCryptoSession);
+        [PreserveSig]
         HRESULT CreateVideoDecoderOutputView(ID3D11Resource pResource, D3D11_VIDEO_DECODER_OUTPUT_VIEW_DESC pDesc, out ID3D11VideoDecoderOutputView ppVDOVView);
-        HRESULT CreateVideoProcessorInputView(ID3D11Resource pResource, ID3D11VideoProcessorEnumerator pEnum, D3D11_VIDEO_PROCESSOR_INPUT_VIEW_DESC pDesc, out ID3D11VideoProcessorInputView ppVPIView);
-        HRESULT CreateVideoProcessorOutputView(ID3D11Resource pResource, ID3D11VideoProcessorEnumerator pEnum, D3D11_VIDEO_PROCESSOR_OUTPUT_VIEW_DESC pDesc, out ID3D11VideoProcessorOutputView ppVPOView);
+        [PreserveSig]
+        HRESULT CreateVideoProcessorInputView(ID3D11Resource pResource, ID3D11VideoProcessorEnumerator pEnum, ref D3D11_VIDEO_PROCESSOR_INPUT_VIEW_DESC pDesc, out ID3D11VideoProcessorInputView ppVPIView);
+        [PreserveSig]
+        HRESULT CreateVideoProcessorOutputView(ID3D11Resource pResource, ID3D11VideoProcessorEnumerator pEnum, ref D3D11_VIDEO_PROCESSOR_OUTPUT_VIEW_DESC pDesc, out ID3D11VideoProcessorOutputView ppVPOView);
         [PreserveSig]
         HRESULT CreateVideoProcessorEnumerator(ref D3D11_VIDEO_PROCESSOR_CONTENT_DESC pDesc, out ID3D11VideoProcessorEnumerator ppEnum);
         [PreserveSig]
         uint GetVideoDecoderProfileCount();
+        [PreserveSig]
         HRESULT GetVideoDecoderProfile(uint Index, out Guid pDecoderProfile);
+        [PreserveSig]
         HRESULT CheckVideoDecoderFormat(ref Guid pDecoderProfile, DXGI_FORMAT Format, out bool pSupported);
+        [PreserveSig]
         HRESULT GetVideoDecoderConfigCount(D3D11_VIDEO_DECODER_DESC pDesc, out uint pCount);
+        [PreserveSig]
         HRESULT GetVideoDecoderConfig(D3D11_VIDEO_DECODER_DESC pDesc, uint Index, out D3D11_VIDEO_DECODER_CONFIG pConfig);
+        [PreserveSig]
         HRESULT GetContentProtectionCaps(ref Guid pCryptoType, ref Guid pDecoderProfile, out D3D11_VIDEO_CONTENT_PROTECTION_CAPS pCaps);
+        [PreserveSig]
         HRESULT CheckCryptoKeyExchange(ref Guid pCryptoType, ref Guid pDecoderProfile, uint Index, out Guid pKeyExchangeType);
+        [PreserveSig]
         HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
     }
 
@@ -2011,17 +2675,27 @@ namespace D3D11
     public interface ID3D11VideoProcessorEnumerator : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         new void GetDevice(out ID3D11Device ppDevice);
-        new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
-        new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, ref uint pDataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         HRESULT GetVideoProcessorContentDesc(out D3D11_VIDEO_PROCESSOR_CONTENT_DESC pContentDesc);
+        [PreserveSig]
         HRESULT CheckVideoProcessorFormat(DXGI_FORMAT Format, out uint pFlags);
+        [PreserveSig]
         HRESULT GetVideoProcessorCaps(out D3D11_VIDEO_PROCESSOR_CAPS pCaps);
+        [PreserveSig]
         HRESULT GetVideoProcessorRateConversionCaps(uint TypeIndex, out D3D11_VIDEO_PROCESSOR_RATE_CONVERSION_CAPS pCaps);
+        [PreserveSig]
         HRESULT GetVideoProcessorCustomRate(uint TypeIndex, uint CustomRateIndex, out D3D11_VIDEO_PROCESSOR_CUSTOM_RATE pRate);
+        [PreserveSig]
         HRESULT GetVideoProcessorFilterRange(D3D11_VIDEO_PROCESSOR_FILTER Filter, out D3D11_VIDEO_PROCESSOR_FILTER_RANGE pRange);
     }
 
@@ -2116,37 +2790,58 @@ namespace D3D11
         new HRESULT CreateDeferredContext(uint ContextFlags, out ID3D11DeviceContext ppDeferredContext);
         [PreserveSig]
         new HRESULT OpenSharedResource(IntPtr hResource, ref Guid ReturnedInterface, out IntPtr ppResource);
+        [PreserveSig]
         new HRESULT CheckFormatSupport(DXGI_FORMAT Format, out uint pFormatSupport);
+        [PreserveSig]
         new HRESULT CheckMultisampleQualityLevels(DXGI_FORMAT Format, uint SampleCount, out uint pNumQualityLevels);
+        [PreserveSig]
         new void CheckCounterInfo(out D3D11_COUNTER_INFO pCounterInfo);
+        [PreserveSig]
         new HRESULT CheckCounter(ref D3D11_COUNTER_DESC pDesc, out D3D11_COUNTER_TYPE pType, out uint pActiveCounters,
                     out string szName, ref uint pNameLength, out string szUnits, ref uint pUnitsLength,
                            out string szDescription, ref uint pDescriptionLength);
+        [PreserveSig]
         new HRESULT CheckFeatureSupport(D3D11_FEATURE Feature, out IntPtr pFeatureSupportData, uint FeatureSupportDataSize);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
+        [PreserveSig]
         new D3D_FEATURE_LEVEL GetFeatureLevel();
+        [PreserveSig]
         new uint GetCreationFlags();
+        [PreserveSig]
         new HRESULT GetDeviceRemovedReason();
+        [PreserveSig]
         new void GetImmediateContext(out ID3D11DeviceContext ppImmediateContext);
+        [PreserveSig]
         new HRESULT SetExceptionMode(uint RaiseFlags);
+        [PreserveSig]
         new uint GetExceptionMode();
         #endregion
 
         //void GetImmediateContext1(out ID3D11DeviceContext1 ppImmediateContext);
+        [PreserveSig]
         void GetImmediateContext1(out IntPtr ppImmediateContext);
         //HRESULT CreateDeferredContext1(uint ContextFlags, out ID3D11DeviceContext1 ppDeferredContext);
+        [PreserveSig]
         HRESULT CreateDeferredContext1(uint ContextFlags, out IntPtr ppDeferredContext);
         //HRESULT CreateBlendState1(ref D3D11_BLEND_DESC1 pBlendStateDesc, out ID3D11BlendState1 ppBlendState);
+        [PreserveSig]
         HRESULT CreateBlendState1(ref D3D11_BLEND_DESC1 pBlendStateDesc, out IntPtr ppBlendState);
         //HRESULT CreateRasterizerState1(ref D3D11_RASTERIZER_DESC1 pRasterizerDesc, out ID3D11RasterizerState1 ppRasterizerState);
+        [PreserveSig]
         HRESULT CreateRasterizerState1(ref D3D11_RASTERIZER_DESC1 pRasterizerDesc, out IntPtr ppRasterizerState);
         //HRESULT CreateDeviceContextState(uint Flags, D3D_FEATURE_LEVEL pFeatureLevels, uint FeatureLevels,
         //   uint SDKVersion, ref Guid EmulatedInterface, out D3D_FEATURE_LEVEL pChosenFeatureLevel, out ID3DDeviceContextState ppContextState);
+        [PreserveSig]
         HRESULT CreateDeviceContextState(uint Flags, D3D_FEATURE_LEVEL pFeatureLevels, uint FeatureLevels,
-        uint SDKVersion, ref Guid EmulatedInterface, out D3D_FEATURE_LEVEL pChosenFeatureLevel, out IntPtr ppContextState);
+            uint SDKVersion, ref Guid EmulatedInterface, out D3D_FEATURE_LEVEL pChosenFeatureLevel, out IntPtr ppContextState);
+        [PreserveSig]
         HRESULT OpenSharedResource1(IntPtr hResource, ref Guid returnedInterface, out IntPtr ppResource);
+        [PreserveSig]
         HRESULT OpenSharedResourceByName(string lpName, uint dwDesiredAccess, ref Guid returnedInterface, out IntPtr ppResource);
     }
 
@@ -2210,4 +2905,171 @@ namespace D3D11
         public uint ForcedSampleCount;
     }
 
+    public enum D3D11_FORMAT_SUPPORT
+    {
+        D3D11_FORMAT_SUPPORT_BUFFER = 0x1,
+        D3D11_FORMAT_SUPPORT_IA_VERTEX_BUFFER = 0x2,
+        D3D11_FORMAT_SUPPORT_IA_INDEX_BUFFER = 0x4,
+        D3D11_FORMAT_SUPPORT_SO_BUFFER = 0x8,
+        D3D11_FORMAT_SUPPORT_TEXTURE1D = 0x10,
+        D3D11_FORMAT_SUPPORT_TEXTURE2D = 0x20,
+        D3D11_FORMAT_SUPPORT_TEXTURE3D = 0x40,
+        D3D11_FORMAT_SUPPORT_TEXTURECUBE = 0x80,
+        D3D11_FORMAT_SUPPORT_SHADER_LOAD = 0x100,
+        D3D11_FORMAT_SUPPORT_SHADER_SAMPLE = 0x200,
+        D3D11_FORMAT_SUPPORT_SHADER_SAMPLE_COMPARISON = 0x400,
+        D3D11_FORMAT_SUPPORT_SHADER_SAMPLE_MONO_TEXT = 0x800,
+        D3D11_FORMAT_SUPPORT_MIP = 0x1000,
+        D3D11_FORMAT_SUPPORT_MIP_AUTOGEN = 0x2000,
+        D3D11_FORMAT_SUPPORT_RENDER_TARGET = 0x4000,
+        D3D11_FORMAT_SUPPORT_BLENDABLE = 0x8000,
+        D3D11_FORMAT_SUPPORT_DEPTH_STENCIL = 0x10000,
+        D3D11_FORMAT_SUPPORT_CPU_LOCKABLE = 0x20000,
+        D3D11_FORMAT_SUPPORT_MULTISAMPLE_RESOLVE = 0x40000,
+        D3D11_FORMAT_SUPPORT_DISPLAY = 0x80000,
+        D3D11_FORMAT_SUPPORT_CAST_WITHIN_BIT_LAYOUT = 0x100000,
+        D3D11_FORMAT_SUPPORT_MULTISAMPLE_RENDERTARGET = 0x200000,
+        D3D11_FORMAT_SUPPORT_MULTISAMPLE_LOAD = 0x400000,
+        D3D11_FORMAT_SUPPORT_SHADER_GATHER = 0x800000,
+        D3D11_FORMAT_SUPPORT_BACK_BUFFER_CAST = 0x1000000,
+        D3D11_FORMAT_SUPPORT_TYPED_UNORDERED_ACCESS_VIEW = 0x2000000,
+        D3D11_FORMAT_SUPPORT_SHADER_GATHER_COMPARISON = 0x4000000,
+        D3D11_FORMAT_SUPPORT_DECODER_OUTPUT = 0x8000000,
+        D3D11_FORMAT_SUPPORT_VIDEO_PROCESSOR_OUTPUT = 0x10000000,
+        D3D11_FORMAT_SUPPORT_VIDEO_PROCESSOR_INPUT = 0x20000000,
+        D3D11_FORMAT_SUPPORT_VIDEO_ENCODER = 0x40000000
+    }
+
+    public enum D3D11_FORMAT_SUPPORT2
+    {
+        D3D11_FORMAT_SUPPORT2_UAV_ATOMIC_ADD = 0x1,
+        D3D11_FORMAT_SUPPORT2_UAV_ATOMIC_BITWISE_OPS = 0x2,
+        D3D11_FORMAT_SUPPORT2_UAV_ATOMIC_COMPARE_STORE_OR_COMPARE_EXCHANGE = 0x4,
+        D3D11_FORMAT_SUPPORT2_UAV_ATOMIC_EXCHANGE = 0x8,
+        D3D11_FORMAT_SUPPORT2_UAV_ATOMIC_SIGNED_MIN_OR_MAX = 0x10,
+        D3D11_FORMAT_SUPPORT2_UAV_ATOMIC_UNSIGNED_MIN_OR_MAX = 0x20,
+        D3D11_FORMAT_SUPPORT2_UAV_TYPED_LOAD = 0x40,
+        D3D11_FORMAT_SUPPORT2_UAV_TYPED_STORE = 0x80,
+        D3D11_FORMAT_SUPPORT2_OUTPUT_MERGER_LOGIC_OP = 0x100,
+        D3D11_FORMAT_SUPPORT2_TILED = 0x200,
+        D3D11_FORMAT_SUPPORT2_SHAREABLE = 0x400,
+        D3D11_FORMAT_SUPPORT2_MULTIPLANE_OVERLAY = 0x4000,
+        D3D11_FORMAT_SUPPORT2_DISPLAYABLE = 0x10000
+    }
+
+    public enum D3D11_VIDEO_PROCESSOR_FORMAT_SUPPORT
+    {
+        D3D11_VIDEO_PROCESSOR_FORMAT_SUPPORT_INPUT = 0x1,
+        D3D11_VIDEO_PROCESSOR_FORMAT_SUPPORT_OUTPUT = 0x2
+    }
+
+    public enum D3D11_VIDEO_PROCESSOR_DEVICE_CAPS
+    {
+        D3D11_VIDEO_PROCESSOR_DEVICE_CAPS_LINEAR_SPACE = 0x1,
+        D3D11_VIDEO_PROCESSOR_DEVICE_CAPS_xvYCC = 0x2,
+        D3D11_VIDEO_PROCESSOR_DEVICE_CAPS_RGB_RANGE_CONVERSION = 0x4,
+        D3D11_VIDEO_PROCESSOR_DEVICE_CAPS_YCbCr_MATRIX_CONVERSION = 0x8,
+        D3D11_VIDEO_PROCESSOR_DEVICE_CAPS_NOMINAL_RANGE = 0x10
+    }
+
+    public enum D3D11_VIDEO_PROCESSOR_FEATURE_CAPS
+    {
+        D3D11_VIDEO_PROCESSOR_FEATURE_CAPS_ALPHA_FILL = 0x1,
+        D3D11_VIDEO_PROCESSOR_FEATURE_CAPS_CONSTRICTION = 0x2,
+        D3D11_VIDEO_PROCESSOR_FEATURE_CAPS_LUMA_KEY = 0x4,
+        D3D11_VIDEO_PROCESSOR_FEATURE_CAPS_ALPHA_PALETTE = 0x8,
+        D3D11_VIDEO_PROCESSOR_FEATURE_CAPS_LEGACY = 0x10,
+        D3D11_VIDEO_PROCESSOR_FEATURE_CAPS_STEREO = 0x20,
+        D3D11_VIDEO_PROCESSOR_FEATURE_CAPS_ROTATION = 0x40,
+        D3D11_VIDEO_PROCESSOR_FEATURE_CAPS_ALPHA_STREAM = 0x80,
+        D3D11_VIDEO_PROCESSOR_FEATURE_CAPS_PIXEL_ASPECT_RATIO = 0x100,
+        D3D11_VIDEO_PROCESSOR_FEATURE_CAPS_MIRROR = 0x200,
+        D3D11_VIDEO_PROCESSOR_FEATURE_CAPS_SHADER_USAGE = 0x400,
+        D3D11_VIDEO_PROCESSOR_FEATURE_CAPS_METADATA_HDR10 = 0x800
+    }
+
+    public enum D3D11_VIDEO_PROCESSOR_FILTER_CAPS
+    {
+        D3D11_VIDEO_PROCESSOR_FILTER_CAPS_BRIGHTNESS = 0x1,
+        D3D11_VIDEO_PROCESSOR_FILTER_CAPS_CONTRAST = 0x2,
+        D3D11_VIDEO_PROCESSOR_FILTER_CAPS_HUE = 0x4,
+        D3D11_VIDEO_PROCESSOR_FILTER_CAPS_SATURATION = 0x8,
+        D3D11_VIDEO_PROCESSOR_FILTER_CAPS_NOISE_REDUCTION = 0x10,
+        D3D11_VIDEO_PROCESSOR_FILTER_CAPS_EDGE_ENHANCEMENT = 0x20,
+        D3D11_VIDEO_PROCESSOR_FILTER_CAPS_ANAMORPHIC_SCALING = 0x40,
+        D3D11_VIDEO_PROCESSOR_FILTER_CAPS_STEREO_ADJUSTMENT = 0x80
+    }
+
+    public enum D3D11_VIDEO_PROCESSOR_FORMAT_CAPS
+    {
+        D3D11_VIDEO_PROCESSOR_FORMAT_CAPS_RGB_INTERLACED = 0x1,
+        D3D11_VIDEO_PROCESSOR_FORMAT_CAPS_RGB_PROCAMP = 0x2,
+        D3D11_VIDEO_PROCESSOR_FORMAT_CAPS_RGB_LUMA_KEY = 0x4,
+        D3D11_VIDEO_PROCESSOR_FORMAT_CAPS_PALETTE_INTERLACED = 0x8
+    }
+
+    public enum D3D11_VIDEO_PROCESSOR_AUTO_STREAM_CAPS
+    {
+        D3D11_VIDEO_PROCESSOR_AUTO_STREAM_CAPS_DENOISE = 0x1,
+        D3D11_VIDEO_PROCESSOR_AUTO_STREAM_CAPS_DERINGING = 0x2,
+        D3D11_VIDEO_PROCESSOR_AUTO_STREAM_CAPS_EDGE_ENHANCEMENT = 0x4,
+        D3D11_VIDEO_PROCESSOR_AUTO_STREAM_CAPS_COLOR_CORRECTION = 0x8,
+        D3D11_VIDEO_PROCESSOR_AUTO_STREAM_CAPS_FLESH_TONE_MAPPING = 0x10,
+        D3D11_VIDEO_PROCESSOR_AUTO_STREAM_CAPS_IMAGE_STABILIZATION = 0x20,
+        D3D11_VIDEO_PROCESSOR_AUTO_STREAM_CAPS_SUPER_RESOLUTION = 0x40,
+        D3D11_VIDEO_PROCESSOR_AUTO_STREAM_CAPS_ANAMORPHIC_SCALING = 0x80
+    }
+
+    public enum D3D11_VIDEO_PROCESSOR_STEREO_CAPS
+    {
+        D3D11_VIDEO_PROCESSOR_STEREO_CAPS_MONO_OFFSET = 0x1,
+        D3D11_VIDEO_PROCESSOR_STEREO_CAPS_ROW_INTERLEAVED = 0x2,
+        D3D11_VIDEO_PROCESSOR_STEREO_CAPS_COLUMN_INTERLEAVED = 0x4,
+        D3D11_VIDEO_PROCESSOR_STEREO_CAPS_CHECKERBOARD = 0x8,
+        D3D11_VIDEO_PROCESSOR_STEREO_CAPS_FLIP_MODE = 0x10
+    }
+
+    public enum D3D11_VIDEO_PROCESSOR_PROCESSOR_CAPS
+    {
+        D3D11_VIDEO_PROCESSOR_PROCESSOR_CAPS_DEINTERLACE_BLEND = 0x1,
+        D3D11_VIDEO_PROCESSOR_PROCESSOR_CAPS_DEINTERLACE_BOB = 0x2,
+        D3D11_VIDEO_PROCESSOR_PROCESSOR_CAPS_DEINTERLACE_ADAPTIVE = 0x4,
+        D3D11_VIDEO_PROCESSOR_PROCESSOR_CAPS_DEINTERLACE_MOTION_COMPENSATION = 0x8,
+        D3D11_VIDEO_PROCESSOR_PROCESSOR_CAPS_INVERSE_TELECINE = 0x10,
+        D3D11_VIDEO_PROCESSOR_PROCESSOR_CAPS_FRAME_RATE_CONVERSION = 0x20
+    }
+
+    public enum D3D11_VIDEO_PROCESSOR_ITELECINE_CAPS
+    {
+        D3D11_VIDEO_PROCESSOR_ITELECINE_CAPS_32 = 0x1,
+        D3D11_VIDEO_PROCESSOR_ITELECINE_CAPS_22 = 0x2,
+        D3D11_VIDEO_PROCESSOR_ITELECINE_CAPS_2224 = 0x4,
+        D3D11_VIDEO_PROCESSOR_ITELECINE_CAPS_2332 = 0x8,
+        D3D11_VIDEO_PROCESSOR_ITELECINE_CAPS_32322 = 0x10,
+        D3D11_VIDEO_PROCESSOR_ITELECINE_CAPS_55 = 0x20,
+        D3D11_VIDEO_PROCESSOR_ITELECINE_CAPS_64 = 0x40,
+        D3D11_VIDEO_PROCESSOR_ITELECINE_CAPS_87 = 0x80,
+        D3D11_VIDEO_PROCESSOR_ITELECINE_CAPS_222222222223 = 0x100,
+        D3D11_VIDEO_PROCESSOR_ITELECINE_CAPS_OTHER = unchecked((int)0x80000000)
+    }
+
+    public enum D3D11_CONTENT_PROTECTION_CAPS
+    {
+        D3D11_CONTENT_PROTECTION_CAPS_SOFTWARE = 0x1,
+        D3D11_CONTENT_PROTECTION_CAPS_HARDWARE = 0x2,
+        D3D11_CONTENT_PROTECTION_CAPS_PROTECTION_ALWAYS_ON = 0x4,
+        D3D11_CONTENT_PROTECTION_CAPS_PARTIAL_DECRYPTION = 0x8,
+        D3D11_CONTENT_PROTECTION_CAPS_CONTENT_KEY = 0x10,
+        D3D11_CONTENT_PROTECTION_CAPS_FRESHEN_SESSION_KEY = 0x20,
+        D3D11_CONTENT_PROTECTION_CAPS_ENCRYPTED_READ_BACK = 0x40,
+        D3D11_CONTENT_PROTECTION_CAPS_ENCRYPTED_READ_BACK_KEY = 0x80,
+        D3D11_CONTENT_PROTECTION_CAPS_SEQUENTIAL_CTR_IV = 0x100,
+        D3D11_CONTENT_PROTECTION_CAPS_ENCRYPT_SLICEDATA_ONLY = 0x200,
+        D3D11_CONTENT_PROTECTION_CAPS_DECRYPTION_BLT = 0x400,
+        D3D11_CONTENT_PROTECTION_CAPS_HARDWARE_PROTECT_UNCOMPRESSED = 0x800,
+        D3D11_CONTENT_PROTECTION_CAPS_HARDWARE_PROTECTED_MEMORY_PAGEABLE = 0x1000,
+        D3D11_CONTENT_PROTECTION_CAPS_HARDWARE_TEARDOWN = 0x2000,
+        D3D11_CONTENT_PROTECTION_CAPS_HARDWARE_DRM_COMMUNICATION = 0x4000,
+        D3D11_CONTENT_PROTECTION_CAPS_HARDWARE_DRM_COMMUNICATION_MULTI_THREADED = 0x8000
+    } 
 }
